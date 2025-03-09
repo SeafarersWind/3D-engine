@@ -1,0 +1,28 @@
+{
+  "build_systems":
+  [
+    {
+      "name": "Make",
+      "cmd": ["mingw32-make"],
+      "working_dir" : "$project_path",
+      "variants":
+      [
+        {
+          "name": "Play",
+          "cmd": ["make", "play"],
+        },
+        {
+          "name": "Clean",
+          "cmd": ["make", "clean"],
+        }
+      ],
+    }
+  ],
+  
+  "folders":
+  [
+    {
+      "path": ".",
+    },
+  ],
+}
