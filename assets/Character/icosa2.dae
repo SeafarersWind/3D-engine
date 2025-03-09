@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 4.0.2 commit date:2023-12-05, commit time:07:41, hash:9be62e85b727</authoring_tool>
+    </contributor>
+    <created>2024-09-04T11:14:17</created>
+    <modified>2024-09-04T11:14:17</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_geometries>
+    <geometry id="Cylinder_009-mesh" name="Cylinder.009">
+      <mesh>
+        <source id="Cylinder_009-mesh-positions">
+          <float_array id="Cylinder_009-mesh-positions-array" count="66">0 0.15 -0.5 0 0.15 0.7499976 0.1299038 0.07499998 -0.5 0.1299038 0.07499998 0.7499976 0.1299038 -0.07499998 -0.5 0.1299038 -0.07499998 0.7499962 0 -0.15 -0.5 0 -0.15 0.7499976 -0.1299038 -0.07499998 -0.5 -0.1299038 -0.07499998 0.7499962 -0.1299038 0.07499998 -0.5 -0.1299038 0.07499998 0.7499976 0.1299038 0.07499998 0.9499986 0 0.15 0.95 -0.1299037 0.07499998 0.9499986 0 -0.15 0.9138852 0.1299037 -0.15 0.9140797 -0.1299039 -0.15 0.9140797 0.1299037 -0.15 1.16408 0 -0.15 1.164196 -0.1299038 -0.15 1.16408 0 -0.4 1.039067</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_009-mesh-positions-array" count="22" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_009-mesh-normals">
+          <float_array id="Cylinder_009-mesh-normals-array" count="102">0.5000001 0.8660255 0 1 0 0 0.5000002 -0.8660253 0 -0.5000002 -0.8660253 0 -0.4999997 0.8660256 0 -1 0 0 -0.5000001 0.8660255 0 0 0 -1 -4.58837e-7 -1 0 1 0 -1.49011e-7 -1 0 1.49011e-7 0.5000004 0.8660252 0 -0.8873565 -0.461084 0 -0.3180706 0.5509001 0.771583 -1 3.97364e-7 1.19209e-7 -0.4648979 -0.8052339 -0.3680604 6.49796e-4 0.6893094 0.7244669 1 -4.70214e-7 2.25703e-7 0.8873565 -0.4610839 0 0 -0.4471775 -0.8944453 0 -0.4472498 0.8944091 1 0 0 0.5000001 -0.8660255 0 -0.5000001 -0.8660255 0 -0.5000004 0.8660252 0 7.64728e-7 0 -1 -3.82364e-7 1.98682e-7 -1 0.464898 -0.805234 -0.36806 0.4999997 0.8660256 0 -6.49796e-4 0.6893095 0.7244668 -1 5.64257e-7 -2.25703e-7 4.58837e-7 -1 0 0.3180705 0.5509 0.771583 1 -3.97364e-7 -1.19209e-7</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_009-mesh-normals-array" count="34" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_009-mesh-map-0">
+          <float_array id="Cylinder_009-mesh-map-0-array" count="228">1 1 0.8333333 0.5 1 0.5 0.8333333 0.5 0.6666666 1 0.6666666 0.5 0.6666666 1 0.5 0.5 0.6666666 0.5 0.5 0.5 0.3333333 1 0.3333333 0.5 0 1 0.1666666 1 0 1 0.3333333 1 0.1666666 0.5 0.3333333 0.5 0.1666666 1 0 0.5 0.1666666 0.5 0.542154 0.1299999 0.542154 0.37 0.9578461 0.37 0.5 1 0.6666666 1 0.5 1 0.6666666 1 0.8333333 1 0.8333333 1 0.1666666 1 0.3333333 1 0.1666666 1 1 1 0.8333333 1 0.8333333 1 0.1666666 1 0.3333333 1 0.1666666 1 0.1666666 1 0 1 0 1 0.1666666 1 0.3333333 1 0.1666666 1 0.5 1 0.3333333 1 0.3333333 1 0.8333333 1 1 1 0.8333333 1 0.8333333 1 0.6666666 1 0.6666666 1 0.6666666 1 0.8333333 1 0.6666666 1 0.6666666 1 0.3333333 1 0.6666666 1 0.6666666 1 0.8333333 1 0.1666666 1 1 1 0.8333333 1 0.8333333 0.5 0.8333333 0.5 0.8333333 1 0.6666666 1 0.6666666 1 0.5 1 0.5 0.5 0.5 0.5 0.5 1 0.3333333 1 0 1 0.1666666 1 0.1666666 1 0.3333333 1 0.1666666 1 0.1666666 0.5 0.1666666 1 0 1 0 0.5 0.542154 0.37 0.75 0.49 0.9578461 0.37 0.9578461 0.37 0.9578461 0.1299999 0.75 0.00999999 0.75 0.00999999 0.542154 0.1299999 0.9578461 0.37 0.5 1 0.6666666 1 0.6666666 1 1 1 1 1 0.8333333 1 0.1666666 1 0.1666666 1 0 1 0.1666666 1 0.3333333 1 0.3333333 1 0.5 1 0.5 1 0.3333333 1 0.8333333 1 1 1 1 1 0.8333333 1 0.8333333 1 0.6666666 1</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_009-mesh-map-0-array" count="114" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cylinder_009-mesh-vertices">
+          <input semantic="POSITION" source="#Cylinder_009-mesh-positions"/>
+        </vertices>
+        <triangles count="38">
+          <input semantic="VERTEX" source="#Cylinder_009-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cylinder_009-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cylinder_009-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 2 1 3 5 1 4 4 1 5 5 2 6 6 2 7 4 2 8 6 3 9 9 3 10 8 3 11 1 4 12 14 4 13 13 4 14 9 5 15 10 5 16 8 5 17 11 6 18 0 6 19 10 6 20 8 7 21 10 7 22 2 7 23 7 8 24 16 8 25 15 8 26 5 9 27 3 9 28 12 9 29 11 10 30 9 10 31 14 10 32 1 11 33 12 11 34 3 11 35 20 12 36 17 12 37 21 12 38 14 13 39 19 13 40 13 13 41 14 14 42 17 14 43 20 14 44 7 15 45 17 15 46 9 15 47 12 16 48 19 16 49 18 16 50 12 17 51 16 17 52 5 17 53 16 18 54 18 18 55 21 18 56 21 19 57 17 19 58 16 19 59 21 20 60 18 20 61 20 20 62 1 0 63 3 0 64 2 0 65 2 21 66 3 21 67 5 21 68 5 22 69 7 22 70 6 22 71 6 23 72 7 23 73 9 23 74 1 24 75 11 24 76 14 24 77 9 5 78 11 5 79 10 5 80 11 6 81 1 6 82 0 6 83 10 7 84 0 7 85 2 7 86 2 25 87 4 25 88 6 25 89 6 26 90 8 26 91 2 26 92 7 27 93 5 27 94 16 27 95 1 28 96 13 28 97 12 28 98 14 29 99 20 29 100 19 29 101 14 30 102 9 30 103 17 30 104 7 31 105 15 31 106 17 31 107 12 32 108 13 32 109 19 32 110 12 33 111 18 33 112 16 33 113</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Cylinder_008-mesh" name="Cylinder.008">
+      <mesh>
+        <source id="Cylinder_008-mesh-positions">
+          <float_array id="Cylinder_008-mesh-positions-array" count="66">0 0.15 -0.5 0 0.15 0.75 0.1299038 0.07499998 -0.5 0.1299038 0.07499998 0.75 0.1299038 -0.07499998 -0.5 0.1299038 -0.07499998 0.75 0 -0.15 -0.5 0 -0.15 0.75 -0.1299038 -0.07499998 -0.5 -0.1299038 -0.07499998 0.75 -0.1299038 0.07499998 -0.5 -0.1299038 0.07499998 0.75 0.1299038 0.07499998 0.95 0 0.15 0.95 -0.1299037 0.07499998 0.95 0 -0.15 0.9138852 0.1299037 -0.15 0.9140797 -0.1299039 -0.15 0.9140797 0.1299037 -0.15 1.16408 0 -0.15 1.164196 -0.1299038 -0.15 1.16408 0 -0.4 1.039067</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_008-mesh-positions-array" count="22" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_008-mesh-normals">
+          <float_array id="Cylinder_008-mesh-normals-array" count="96">0.5 0.8660254 0 1 0 0 0.5000002 -0.8660253 0 -0.5000002 -0.8660253 0 -0.4999997 0.8660256 0 -1 0 0 -0.5 0.8660254 0 0 0 -1 0 -1 0 1 0 -1.49012e-7 -1 0 1.49012e-7 0.4999997 0.8660256 0 -0.8873567 -0.4610838 0 -0.3180642 0.5509013 0.7715847 -1 3.97364e-7 0 -0.4648997 -0.8052299 -0.3680668 6.48575e-4 0.689307 0.7244691 1 -4.70223e-7 2.25707e-7 0.8873567 -0.4610838 0 0 -0.4471763 -0.8944459 0 -0.4472507 0.8944087 0.5000001 -0.8660254 0 -0.5 -0.8660254 0 -0.5000002 0.8660254 0 7.64728e-7 0 -1 -3.82364e-7 1.98682e-7 -1 0.4648998 -0.80523 -0.3680664 0.5000002 0.8660254 0 -6.48575e-4 0.6893071 0.724469 -1 4.70223e-7 -2.25707e-7 0.3180642 0.5509012 0.7715848 1 -3.97364e-7 0</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_008-mesh-normals-array" count="32" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_008-mesh-map-0">
+          <float_array id="Cylinder_008-mesh-map-0-array" count="228">1 1 0.8333333 0.5 1 0.5 0.8333333 1 0.6666666 0.5 0.8333333 0.5 0.6666666 1 0.5 0.5 0.6666666 0.5 0.5 1 0.3333333 0.5 0.5 0.5 0 1 0.1666666 1 0 1 0.3333333 1 0.1666666 0.5 0.3333333 0.5 0.1666666 1 0 0.5 0.1666666 0.5 0.542154 0.1299999 0.542154 0.37 0.9578461 0.37 0.5 1 0.6666666 1 0.5 1 0.6666666 1 0.8333333 1 0.8333333 1 0.1666666 1 0.3333333 1 0.1666666 1 0.8333333 1 1 1 0.8333333 1 0.1666666 1 0.3333333 1 0.1666666 1 0.1666666 1 0 1 0 1 0.1666666 1 0.3333333 1 0.1666666 1 0.5 1 0.3333333 1 0.3333333 1 0.8333333 1 1 1 0.8333333 1 0.8333333 1 0.6666666 1 0.6666666 1 0.6666666 1 0.8333333 1 0.6666666 1 0.6666666 1 0.3333333 1 0.6666666 1 0.6666666 1 0.8333333 1 0.1666666 1 1 1 0.8333333 1 0.8333333 0.5 0.8333333 1 0.6666666 1 0.6666666 0.5 0.6666666 1 0.5 1 0.5 0.5 0.5 1 0.3333333 1 0.3333333 0.5 0 1 0.1666666 1 0.1666666 1 0.3333333 1 0.1666666 1 0.1666666 0.5 0.1666666 1 0 1 0 0.5 0.542154 0.37 0.75 0.49 0.9578461 0.37 0.9578461 0.37 0.9578461 0.1299999 0.75 0.00999999 0.75 0.00999999 0.542154 0.1299999 0.9578461 0.37 0.5 1 0.6666666 1 0.6666666 1 0.8333333 1 1 1 1 1 0.1666666 1 0.1666666 1 0 1 0.1666666 1 0.3333333 1 0.3333333 1 0.5 1 0.5 1 0.3333333 1 0.8333333 1 1 1 1 1 0.8333333 1 0.8333333 1 0.6666666 1</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_008-mesh-map-0-array" count="114" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cylinder_008-mesh-vertices">
+          <input semantic="POSITION" source="#Cylinder_008-mesh-positions"/>
+        </vertices>
+        <triangles count="38">
+          <input semantic="VERTEX" source="#Cylinder_008-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cylinder_008-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cylinder_008-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 3 1 3 4 1 4 2 1 5 5 2 6 6 2 7 4 2 8 7 3 9 8 3 10 6 3 11 1 4 12 14 4 13 13 4 14 9 5 15 10 5 16 8 5 17 11 6 18 0 6 19 10 6 20 8 7 21 10 7 22 2 7 23 7 8 24 16 8 25 15 8 26 5 9 27 3 9 28 12 9 29 11 10 30 9 10 31 14 10 32 3 11 33 13 11 34 12 11 35 20 12 36 17 12 37 21 12 38 14 13 39 19 13 40 13 13 41 14 14 42 17 14 43 20 14 44 7 15 45 17 15 46 9 15 47 12 16 48 19 16 49 18 16 50 12 17 51 16 17 52 5 17 53 16 18 54 18 18 55 21 18 56 21 19 57 17 19 58 16 19 59 21 20 60 18 20 61 20 20 62 1 0 63 3 0 64 2 0 65 3 1 66 5 1 67 4 1 68 5 21 69 7 21 70 6 21 71 7 22 72 9 22 73 8 22 74 1 23 75 11 23 76 14 23 77 9 5 78 11 5 79 10 5 80 11 6 81 1 6 82 0 6 83 10 7 84 0 7 85 2 7 86 2 24 87 4 24 88 6 24 89 6 25 90 8 25 91 2 25 92 7 26 93 5 26 94 16 26 95 3 27 96 1 27 97 13 27 98 14 28 99 20 28 100 19 28 101 14 29 102 9 29 103 17 29 104 7 8 105 15 8 106 17 8 107 12 30 108 13 30 109 19 30 110 12 31 111 18 31 112 16 31 113</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Cylinder_007-mesh" name="Cylinder.007">
+      <mesh>
+        <source id="Cylinder_007-mesh-positions">
+          <float_array id="Cylinder_007-mesh-positions-array" count="39">0 0.25 -0.75 0 0.25 0.75 0.2165063 0.125 -0.75 0.2165063 0.125 0.75 0.2165063 -0.125 -0.75 0.2165063 -0.125 0.75 0 -0.25 -0.75 0 -0.25 0.75 -0.2165063 -0.125 -0.75 -0.2165063 -0.125 0.75 -0.2165063 0.125 -0.75 -0.2165063 0.125 0.75 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_007-mesh-positions-array" count="13" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_007-mesh-normals">
+          <float_array id="Cylinder_007-mesh-normals-array" count="39">0.5 0.8660254 0 1 0 0 0.5 -0.8660254 0 -0.5 -0.8660254 0 0.3779645 0.6546537 0.6546537 -1 0 0 -0.5 0.8660254 0 0 0 -1 0.3779645 -0.6546537 0.6546537 -0.3779645 0.6546537 0.6546537 -0.3779645 -0.6546537 0.6546537 0.755929 0 0.6546537 -0.755929 0 0.6546537</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_007-mesh-normals-array" count="13" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_007-mesh-map-0">
+          <float_array id="Cylinder_007-mesh-map-0-array" count="132">1 1 0.8333333 0.5 1 0.5 0.8333333 1 0.6666666 0.5 0.8333333 0.5 0.6666666 1 0.5 0.5 0.6666666 0.5 0.5 1 0.3333333 0.5 0.5 0.5 0.8333333 1 1 1 0.8333333 1 0.3333333 1 0.1666666 0.5 0.3333333 0.5 0.1666666 1 0 0.5 0.1666666 0.5 0.9578461 0.37 0.75 0.00999999 0.5421539 0.37 0.5 1 0.6666666 1 0.5 1 0 1 0.1666666 1 0 1 0.3333333 1 0.5 1 0.3333333 1 0.6666666 1 0.8333333 1 0.6666666 1 0.1666666 1 0.3333333 1 0.1666666 1 1 1 0.8333333 1 0.8333333 0.5 0.8333333 1 0.6666666 1 0.6666666 0.5 0.6666666 1 0.5 1 0.5 0.5 0.5 1 0.3333333 1 0.3333333 0.5 0.3333333 1 0.1666666 1 0.1666666 0.5 0.1666666 1 0 1 0 0.5 0.5421539 0.37 0.75 0.49 0.9578461 0.37 0.9578461 0.37 0.9578461 0.1299999 0.75 0.00999999 0.75 0.00999999 0.5421539 0.1299999 0.5421539 0.37</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_007-mesh-map-0-array" count="66" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cylinder_007-mesh-vertices">
+          <input semantic="POSITION" source="#Cylinder_007-mesh-positions"/>
+        </vertices>
+        <triangles count="22">
+          <input semantic="VERTEX" source="#Cylinder_007-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cylinder_007-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cylinder_007-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 3 1 3 4 1 4 2 1 5 5 2 6 6 2 7 4 2 8 7 3 9 8 3 10 6 3 11 3 4 12 1 4 13 12 4 14 9 5 15 10 5 16 8 5 17 11 6 18 0 6 19 10 6 20 2 7 21 6 7 22 10 7 23 7 8 24 5 8 25 12 8 26 1 9 27 11 9 28 12 9 29 9 10 30 7 10 31 12 10 32 5 11 33 3 11 34 12 11 35 11 12 36 9 12 37 12 12 38 1 0 39 3 0 40 2 0 41 3 1 42 5 1 43 4 1 44 5 2 45 7 2 46 6 2 47 7 3 48 9 3 49 8 3 50 9 5 51 11 5 52 10 5 53 11 6 54 1 6 55 0 6 56 10 7 57 0 7 58 2 7 59 2 7 60 4 7 61 6 7 62 6 7 63 8 7 64 10 7 65</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Cylinder_006-mesh" name="Cylinder.006">
+      <mesh>
+        <source id="Cylinder_006-mesh-positions">
+          <float_array id="Cylinder_006-mesh-positions-array" count="39">0 0.25 -0.75 0 0.25 0.75 0.2165063 0.125 -0.75 0.2165063 0.125 0.75 0.2165063 -0.125 -0.75 0.2165063 -0.125 0.75 0 -0.25 -0.75 0 -0.25 0.75 -0.2165063 -0.125 -0.75 -0.2165063 -0.125 0.75 -0.2165063 0.125 -0.75 -0.2165063 0.125 0.75 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_006-mesh-positions-array" count="13" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_006-mesh-normals">
+          <float_array id="Cylinder_006-mesh-normals-array" count="39">0.5 0.8660254 0 1 0 0 0.5 -0.8660254 0 -0.5 -0.8660254 0 0.3779645 0.6546537 0.6546537 -1 0 0 -0.5 0.8660254 0 0 0 -1 0.3779645 -0.6546537 0.6546537 -0.3779645 0.6546537 0.6546537 -0.3779645 -0.6546537 0.6546537 0.755929 0 0.6546537 -0.755929 0 0.6546537</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_006-mesh-normals-array" count="13" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder_006-mesh-map-0">
+          <float_array id="Cylinder_006-mesh-map-0-array" count="132">1 1 0.8333333 0.5 1 0.5 0.8333333 1 0.6666666 0.5 0.8333333 0.5 0.6666666 1 0.5 0.5 0.6666666 0.5 0.5 1 0.3333333 0.5 0.5 0.5 0.8333333 1 1 1 0.8333333 1 0.3333333 1 0.1666666 0.5 0.3333333 0.5 0.1666666 1 0 0.5 0.1666666 0.5 0.9578461 0.37 0.75 0.00999999 0.5421539 0.37 0.5 1 0.6666666 1 0.5 1 0 1 0.1666666 1 0 1 0.3333333 1 0.5 1 0.3333333 1 0.6666666 1 0.8333333 1 0.6666666 1 0.1666666 1 0.3333333 1 0.1666666 1 1 1 0.8333333 1 0.8333333 0.5 0.8333333 1 0.6666666 1 0.6666666 0.5 0.6666666 1 0.5 1 0.5 0.5 0.5 1 0.3333333 1 0.3333333 0.5 0.3333333 1 0.1666666 1 0.1666666 0.5 0.1666666 1 0 1 0 0.5 0.5421539 0.37 0.75 0.49 0.9578461 0.37 0.9578461 0.37 0.9578461 0.1299999 0.75 0.00999999 0.75 0.00999999 0.5421539 0.1299999 0.5421539 0.37</float_array>
+          <technique_common>
+            <accessor source="#Cylinder_006-mesh-map-0-array" count="66" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cylinder_006-mesh-vertices">
+          <input semantic="POSITION" source="#Cylinder_006-mesh-positions"/>
+        </vertices>
+        <triangles count="22">
+          <input semantic="VERTEX" source="#Cylinder_006-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cylinder_006-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cylinder_006-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 3 1 3 4 1 4 2 1 5 5 2 6 6 2 7 4 2 8 7 3 9 8 3 10 6 3 11 3 4 12 1 4 13 12 4 14 9 5 15 10 5 16 8 5 17 11 6 18 0 6 19 10 6 20 2 7 21 6 7 22 10 7 23 7 8 24 5 8 25 12 8 26 1 9 27 11 9 28 12 9 29 9 10 30 7 10 31 12 10 32 5 11 33 3 11 34 12 11 35 11 12 36 9 12 37 12 12 38 1 0 39 3 0 40 2 0 41 3 1 42 5 1 43 4 1 44 5 2 45 7 2 46 6 2 47 7 3 48 9 3 49 8 3 50 9 5 51 11 5 52 10 5 53 11 6 54 1 6 55 0 6 56 10 7 57 0 7 58 2 7 59 2 7 60 4 7 61 6 7 62 6 7 63 8 7 64 10 7 65</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Icosphere-mesh" name="Icosphere">
+      <mesh>
+        <source id="Icosphere-mesh-positions">
+          <float_array id="Icosphere-mesh-positions-array" count="45">0.1461328 -0.6595371 0 0.3215489 -0.2921052 0.379273 -0.3384901 -0.2921052 0.473753 -0.7405982 -0.2676983 0 -0.3384901 -0.2921052 -0.473753 0.3215489 -0.2921052 -0.379273 0.09497481 0.2369768 0.613681 -0.5640512 0.4092779 0.317693 -0.5640512 0.4092779 -0.317693 0.09497481 0.2369768 -0.613681 0.4122129 0.3345108 0 -0.1217571 0.611836 0 0.4181649 -0.2921052 0 0.4289399 0.07445192 0.315221 0.4289399 0.07445192 -0.315221</float_array>
+          <technique_common>
+            <accessor source="#Icosphere-mesh-positions-array" count="15" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Icosphere-mesh-normals">
+          <float_array id="Icosphere-mesh-normals-array" count="45">0.2348447 -0.9720329 -8.16362e-7 0.5757133 -0.4749128 0.6655915 -0.3651159 -0.4840151 0.7952483 0.9300912 -0.367329 2.1358e-6 -0.8937528 -0.4485601 0 -0.3651158 -0.4840151 -0.7952484 0.592903 -0.4599521 -0.6609919 0.8886067 0.146461 0.434658 0.2235641 0.3453834 0.9114436 -0.6382298 0.5468249 0.5418905 -0.6382303 0.5468242 -0.5418906 0.2234102 0.3454837 -0.9114433 0.8886066 0.146461 -0.434658 0.7858251 0.6184487 4.7957e-4 0.08310484 0.9965409 -2.14961e-7</float_array>
+          <technique_common>
+            <accessor source="#Icosphere-mesh-normals-array" count="15" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Icosphere-mesh-map-0">
+          <float_array id="Icosphere-mesh-map-0-array" count="156">0.181819 0 0.272728 0.157461 0.09090995 0.157461 0.363637 0 0.363637 0.157461 0.272728 0.157461 0.909091 0 1 0.157461 0.818182 0.157461 0.727273 0 0.818182 0.157461 0.636364 0.157461 0.545455 0 0.636364 0.157461 0.454546 0.157461 0.272728 0.157461 0.363637 0.157461 0.318182 0.236191 0.09090995 0.157461 0.272728 0.157461 0.181819 0.314921 0.818182 0.157461 1 0.157461 0.909091 0.314921 0.636364 0.157461 0.818182 0.157461 0.727273 0.314921 0.454546 0.157461 0.636364 0.157461 0.545455 0.314921 0.318182 0.236191 0.181819 0.314921 0.272728 0.157461 0.09090995 0.157461 0.181819 0.314921 0 0.314921 0.818182 0.157461 0.909091 0.314921 0.727273 0.314921 0.636364 0.157461 0.727273 0.314921 0.545455 0.314921 0.545455 0.314921 0.409092 0.236191 0.454546 0.157461 0.181819 0.314921 0.363637 0.314921 0.272728 0.472382 0 0.314921 0.181819 0.314921 0.09090995 0.472382 0.727273 0.314921 0.909091 0.314921 0.818182 0.472382 0.545455 0.314921 0.727273 0.314921 0.636364 0.472382 0.363637 0.314921 0.545455 0.314921 0.454546 0.472382 0.318182 0.236191 0.409092 0.236191 0.363637 0.314921 0.318182 0.236191 0.363637 0.157461 0.409092 0.236191 0.363637 0.157461 0.454546 0.157461 0.409092 0.236191 0.363637 0 0.454546 0.157461 0.363637 0.157461 0.318182 0.236191 0.363637 0.314921 0.181819 0.314921 0.545455 0.314921 0.363637 0.314921 0.409092 0.236191</float_array>
+          <technique_common>
+            <accessor source="#Icosphere-mesh-map-0-array" count="78" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Icosphere-mesh-vertices">
+          <input semantic="POSITION" source="#Icosphere-mesh-positions"/>
+        </vertices>
+        <triangles count="26">
+          <input semantic="VERTEX" source="#Icosphere-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Icosphere-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Icosphere-mesh-map-0" offset="2" set="0"/>
+          <p>0 0 0 1 1 1 2 2 2 0 0 3 12 3 4 1 1 5 0 0 6 2 2 7 3 4 8 0 0 9 3 4 10 4 5 11 0 0 12 4 5 13 5 6 14 1 1 15 12 3 16 13 7 17 2 2 18 1 1 19 6 8 20 3 4 21 2 2 22 7 9 23 4 5 24 3 4 25 8 10 26 5 6 27 4 5 28 9 11 29 13 7 30 6 8 31 1 1 32 2 2 33 6 8 34 7 9 35 3 4 36 7 9 37 8 10 38 4 5 39 8 10 40 9 11 41 9 11 42 14 12 43 5 6 44 6 8 45 10 13 46 11 14 47 7 9 48 6 8 49 11 14 50 8 10 51 7 9 52 11 14 53 9 11 54 8 10 55 11 14 56 10 13 57 9 11 58 11 14 59 13 7 60 14 12 61 10 13 62 13 7 63 12 3 64 14 12 65 12 3 66 5 6 67 14 12 68 0 0 69 5 6 70 12 3 71 13 7 72 10 13 73 6 8 74 9 11 75 10 13 76 14 12 77</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Cylinder-mesh" name="Cylinder">
+      <mesh>
+        <source id="Cylinder-mesh-positions">
+          <float_array id="Cylinder-mesh-positions-array" count="54">-0.305647 1.452456 0 -0.305647 2.8 0 -0.152823 1.452456 -0.529569 -0.152823 2.8 -0.529569 0.152823 1.45246 -0.5295689 0.152823 2.8 -0.529569 0.305647 1.452456 0 0.305647 2.8 0 0.152823 1.452456 0.529569 0.152823 2.8 0.529569 -0.152823 1.452456 0.529569 -0.152823 2.8 0.529569 -0.152823 3 -0.338765 -0.305647 3 0 0.152823 3 -0.338765 0.305647 3 0 0.152823 3 0.338765 -0.152823 3 0.338765</float_array>
+          <technique_common>
+            <accessor source="#Cylinder-mesh-positions-array" count="18" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder-mesh-normals">
+          <float_array id="Cylinder-mesh-normals-array" count="78">-0.9607929 0 -0.2772673 2.86341e-7 0 -1 0.9607928 0 -0.2772674 0.9607929 0 0.2772673 0.9115388 0 -0.411214 0 0 1 -0.9607929 0 0.2772673 0 -1 -3.68247e-7 0 1 1.15131e-6 -0.9115389 0 0.4112139 0.9288465 0.2557232 0.2680486 0 0.690276 -0.7235462 0 0.6902759 0.7235463 -0.9288464 0.2557232 -0.2680485 0 0 -1 0.9607928 0 -0.2772673 0.9288464 0.2557232 -0.2680485 -0.9607929 0 0.2772673 0 -1 0 1.32608e-5 -1 -1.12315e-5 0 1 0 -0.9288465 0.2557232 0.2680486 0.9115389 0 0.4112139 0 0.6902774 -0.7235448 0 0.6902773 0.7235449 -0.9115388 0 -0.411214</float_array>
+          <technique_common>
+            <accessor source="#Cylinder-mesh-normals-array" count="26" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cylinder-mesh-map-0">
+          <float_array id="Cylinder-mesh-map-0-array" count="192">1 1 0.833333 0.5 1 0.5 0.833333 1 0.666667 0.5 0.833333 0.5 0.666667 0.5 0.5 1 0.5 0.5 0.5 1 0.333333 0.5 0.5 0.5 0.5 1 0.666667 1 0.5 1 0.333333 1 0.166667 0.5 0.333333 0.5 0.166667 1 0 0.5 0.166667 0.5 0.75 0.00999999 0.542154 0.1299999 0.542154 0.37 0.25 0.00999999 0.457846 0.1299999 0.25 0.49 0 1 0.166667 1 0 1 0.5 1 0.333333 1 0.333333 1 0.833333 1 0.666667 1 0.666667 1 0.333333 1 0.166667 1 0.166667 1 1 1 0.833333 1 0.833333 1 1 1 0.833333 1 0.833333 0.5 0.833333 1 0.666667 1 0.666667 0.5 0.666667 0.5 0.666667 1 0.5 1 0.5 1 0.333333 1 0.333333 0.5 0.5 1 0.666667 1 0.666667 1 0.333333 1 0.166667 1 0.166667 0.5 0.166667 1 0 1 0 0.5 0.542154 0.37 0.75 0.49 0.75 0.00999999 0.75 0.49 0.957846 0.37 0.75 0.00999999 0.957846 0.37 0.957846 0.1299999 0.75 0.00999999 0.457846 0.1299999 0.457846 0.37 0.25 0.49 0.25 0.49 0.04215395 0.37 0.04215395 0.1299999 0.04215395 0.1299999 0.25 0.00999999 0.25 0.49 0 1 0.166667 1 0.166667 1 0.5 1 0.5 1 0.333333 1 0.833333 1 0.833333 1 0.666667 1 0.333333 1 0.333333 1 0.166667 1 1 1 1 1 0.833333 1</float_array>
+          <technique_common>
+            <accessor source="#Cylinder-mesh-map-0-array" count="96" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cylinder-mesh-vertices">
+          <input semantic="POSITION" source="#Cylinder-mesh-positions"/>
+        </vertices>
+        <triangles count="32">
+          <input semantic="VERTEX" source="#Cylinder-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cylinder-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cylinder-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 0 0 2 3 1 3 4 1 4 2 1 5 4 2 6 7 2 7 6 2 8 7 3 9 8 3 10 6 3 11 7 4 12 14 4 13 15 4 14 9 5 15 10 5 16 8 5 17 11 6 18 0 6 19 10 6 20 6 7 21 8 7 22 10 7 23 15 8 24 14 8 25 13 8 26 1 9 27 17 9 28 13 9 29 7 10 30 16 10 31 9 10 32 3 11 33 14 11 34 5 11 35 9 12 36 17 12 37 11 12 38 1 13 39 12 13 40 3 13 41 1 0 42 3 0 43 2 0 44 3 14 45 5 14 46 4 14 47 4 15 48 5 15 49 7 15 50 7 3 51 9 3 52 8 3 53 7 16 54 5 16 55 14 16 56 9 5 57 11 5 58 10 5 59 11 17 60 1 17 61 0 17 62 10 18 63 0 18 64 6 18 65 0 18 66 2 18 67 6 18 68 2 19 69 4 19 70 6 19 71 14 20 72 12 20 73 13 20 74 13 20 75 17 20 76 16 20 77 16 20 78 15 20 79 13 20 80 1 21 81 11 21 82 17 21 83 7 22 84 15 22 85 16 22 86 3 23 87 12 23 88 14 23 89 9 24 90 16 24 91 17 24 92 1 25 93 13 25 94 12 25 95</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="Armature_Cylinder_004-skin" name="Armature">
+      <skin source="#Cylinder_009-mesh">
+        <bind_shape_matrix>1 0 0 0 0 1 0 0.679569 0 0 1 0.3434629 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Cylinder_004-skin-joints">
+          <Name_array id="Armature_Cylinder_004-skin-joints-array" count="4">Bone Bone_001 Bone_002 Bone_003</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_004-skin-joints-array" count="4" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_004-skin-bind_poses">
+          <float_array id="Armature_Cylinder_004-skin-bind_poses-array" count="64">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1 1 0 0 0 0 0.6215167 -0.783401 1.929041 0 0.7834007 0.6215167 -2.206405 0 0 0 1 0.9997396 -0.02282035 0 0.01550799 0 1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 -0.6793918 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_004-skin-bind_poses-array" count="4" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_004-skin-weights">
+          <float_array id="Armature_Cylinder_004-skin-weights-array" count="22">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_004-skin-weights-array" count="22" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Cylinder_004-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Cylinder_004-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="22">
+          <input semantic="JOINT" source="#Armature_Cylinder_004-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Cylinder_004-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>3 0 3 1 3 2 3 3 3 4 3 5 3 6 3 7 3 8 3 9 3 10 3 11 3 12 3 13 3 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+    <controller id="Armature_Cylinder_002-skin" name="Armature">
+      <skin source="#Cylinder_008-mesh">
+        <bind_shape_matrix>1 0 0 0 0 -1 0 -0.679569 0 0 1 0.3434629 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Cylinder_002-skin-joints">
+          <Name_array id="Armature_Cylinder_002-skin-joints-array" count="6">Bone Bone_001 Bone_002 Bone_003 Bone_004 Bone_005</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_002-skin-joints-array" count="6" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_002-skin-bind_poses">
+          <float_array id="Armature_Cylinder_002-skin-bind_poses-array" count="96">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1 1 0 0 0 0 0.6215167 -0.783401 1.929041 0 0.7834007 0.6215167 -2.206405 0 0 0 1 0.9997396 -0.02282035 0 0.01550799 0 1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 -0.6793918 0 0 0 1 1 0 0 0 0 -0.6215167 -0.783401 1.929041 0 0.7834007 -0.6215167 2.206405 0 0 0 1 0.9997396 -0.02282035 0 -0.01550799 0 -1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 0.6793918 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_002-skin-bind_poses-array" count="6" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_002-skin-weights">
+          <float_array id="Armature_Cylinder_002-skin-weights-array" count="22">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_002-skin-weights-array" count="22" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Cylinder_002-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Cylinder_002-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="22">
+          <input semantic="JOINT" source="#Armature_Cylinder_002-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Cylinder_002-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>5 0 5 1 5 2 5 3 5 4 5 5 5 6 5 7 5 8 5 9 5 10 5 11 5 12 5 13 5 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+    <controller id="Armature_Cylinder_003-skin" name="Armature">
+      <skin source="#Cylinder_007-mesh">
+        <bind_shape_matrix>0.9200001 0 0 0 0 0.9200001 0 -0.25 0 0 1 -0.75 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Cylinder_003-skin-joints">
+          <Name_array id="Armature_Cylinder_003-skin-joints-array" count="8">Bone Bone_001 Bone_002 Bone_003 Bone_004 Bone_005 Bone_006 Bone_007</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_003-skin-joints-array" count="8" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_003-skin-bind_poses">
+          <float_array id="Armature_Cylinder_003-skin-bind_poses-array" count="128">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1 1 0 0 0 0 0.6215167 -0.783401 1.929041 0 0.7834007 0.6215167 -2.206405 0 0 0 1 0.9997396 -0.02282035 0 0.01550799 0 1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 -0.6793918 0 0 0 1 1 0 0 0 0 -0.6215167 -0.783401 1.929041 0 0.7834007 -0.6215167 2.206405 0 0 0 1 0.9997396 -0.02282035 0 -0.01550799 0 -1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 0.6793918 0 0 0 1 1 0 0 0 0 0 -1 1.5 0 1 0 -0.25 0 0 0 1 1 0 0 0 0 0 -1 1.5 0 1 0 0.25 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_003-skin-bind_poses-array" count="8" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_003-skin-weights">
+          <float_array id="Armature_Cylinder_003-skin-weights-array" count="13">1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_003-skin-weights-array" count="13" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Cylinder_003-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Cylinder_003-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="13">
+          <input semantic="JOINT" source="#Armature_Cylinder_003-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Cylinder_003-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>7 0 7 1 7 2 7 3 7 4 7 5 7 6 7 7 7 8 7 9 7 10 7 11 7 12</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+    <controller id="Armature_Cylinder_001-skin" name="Armature">
+      <skin source="#Cylinder_006-mesh">
+        <bind_shape_matrix>0.9200001 0 0 0 0 0.9200001 0 0.25 0 0 1 -0.75 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Cylinder_001-skin-joints">
+          <Name_array id="Armature_Cylinder_001-skin-joints-array" count="8">Bone Bone_001 Bone_002 Bone_003 Bone_004 Bone_005 Bone_006 Bone_007</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_001-skin-joints-array" count="8" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_001-skin-bind_poses">
+          <float_array id="Armature_Cylinder_001-skin-bind_poses-array" count="128">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1 1 0 0 0 0 0.6215167 -0.783401 1.929041 0 0.7834007 0.6215167 -2.206405 0 0 0 1 0.9997396 -0.02282035 0 0.01550799 0 1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 -0.6793918 0 0 0 1 1 0 0 0 0 -0.6215167 -0.783401 1.929041 0 0.7834007 -0.6215167 2.206405 0 0 0 1 0.9997396 -0.02282035 0 -0.01550799 0 -1.49037e-7 -1 2.69346 0.02282035 0.9997394 0 0.6793918 0 0 0 1 1 0 0 0 0 0 -1 1.5 0 1 0 -0.25 0 0 0 1 1 0 0 0 0 0 -1 1.5 0 1 0 0.25 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_001-skin-bind_poses-array" count="8" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder_001-skin-weights">
+          <float_array id="Armature_Cylinder_001-skin-weights-array" count="13">1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder_001-skin-weights-array" count="13" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Cylinder_001-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Cylinder_001-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="13">
+          <input semantic="JOINT" source="#Armature_Cylinder_001-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Cylinder_001-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>6 0 6 1 6 2 6 3 6 4 6 5 6 6 6 7 6 8 6 9 6 10 6 11 6 12</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+    <controller id="Armature_Icosphere-skin" name="Armature">
+      <skin source="#Icosphere-mesh">
+        <bind_shape_matrix>1 0 0 0.1721761 0 7.54979e-8 -1 2.7062e-7 0 1 7.54979e-8 2.087101 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Icosphere-skin-joints">
+          <Name_array id="Armature_Icosphere-skin-joints-array" count="2">Bone Bone_001</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Icosphere-skin-joints-array" count="2" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Icosphere-skin-bind_poses">
+          <float_array id="Armature_Icosphere-skin-bind_poses-array" count="32">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Icosphere-skin-bind_poses-array" count="2" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Icosphere-skin-weights">
+          <float_array id="Armature_Icosphere-skin-weights-array" count="15">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Icosphere-skin-weights-array" count="15" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Icosphere-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Icosphere-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="15">
+          <input semantic="JOINT" source="#Armature_Icosphere-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Icosphere-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>1 0 1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 1 9 1 10 1 11 1 12 1 13 1 14</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+    <controller id="Armature_Cylinder-skin" name="Armature">
+      <skin source="#Cylinder-mesh">
+        <bind_shape_matrix>1 0 0 0 0 7.54979e-8 -1 0 0 1 7.54979e-8 -1.5 0 0 0 1</bind_shape_matrix>
+        <source id="Armature_Cylinder-skin-joints">
+          <Name_array id="Armature_Cylinder-skin-joints-array" count="2">Bone Bone_001</Name_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder-skin-joints-array" count="2" stride="1">
+              <param name="JOINT" type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder-skin-bind_poses">
+          <float_array id="Armature_Cylinder-skin-bind_poses-array" count="32">1 0 0 0 0 0 1 -1.5 0 -1 0 0 0 0 0 1 1 0 0 0 0 0 1 -3 0 -1 0 0 0 0 0 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder-skin-bind_poses-array" count="2" stride="16">
+              <param name="TRANSFORM" type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Armature_Cylinder-skin-weights">
+          <float_array id="Armature_Cylinder-skin-weights-array" count="18">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor source="#Armature_Cylinder-skin-weights-array" count="18" stride="1">
+              <param name="WEIGHT" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Armature_Cylinder-skin-joints"/>
+          <input semantic="INV_BIND_MATRIX" source="#Armature_Cylinder-skin-bind_poses"/>
+        </joints>
+        <vertex_weights count="18">
+          <input semantic="JOINT" source="#Armature_Cylinder-skin-joints" offset="0"/>
+          <input semantic="WEIGHT" source="#Armature_Cylinder-skin-weights" offset="1"/>
+          <vcount>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 </vcount>
+          <v>0 0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17</v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Armature" name="Armature" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 1.5 0 0 0 1</matrix>
+        <node id="Armature_Bone" name="Bone" sid="Bone" type="JOINT">
+          <matrix sid="transform">1 0 0 0 0 0 -1 0 0 1 0 0 0 0 0 1</matrix>
+          <node id="Armature_Bone_001" name="Bone.001" sid="Bone_001" type="JOINT">
+            <matrix sid="transform">1 0 0 0 0 1 0 1.5 0 0 1 0 0 0 0 1</matrix>
+            <extra>
+              <technique profile="blender">
+                <connect sid="connect" type="bool">1</connect>
+                <collections type="string">Bones</collections>
+                <tip_x sid="tip_x" type="float">0</tip_x>
+                <tip_y sid="tip_y" type="float">0</tip_y>
+                <tip_z sid="tip_z" type="float">0.5</tip_z>
+              </technique>
+            </extra>
+          </node>
+          <node id="Armature_Bone_002" name="Bone.002" sid="Bone_002" type="JOINT">
+            <matrix sid="transform">1 0 0 0 0 -0.7834009 0.6215168 1.38253 0 -0.6215168 -0.7834011 -0.529569 0 0 0 1</matrix>
+            <node id="Armature_Bone_003" name="Bone.003" sid="Bone_003" type="JOINT">
+              <matrix sid="transform">0.9997396 9.31323e-10 0.0228204 0 -0.01418326 0.783401 0.6213548 0.2413451 -0.01787752 -0.6215166 0.783197 1.19209e-7 0 0 0 1</matrix>
+              <extra>
+                <technique profile="blender">
+                  <connect sid="connect" type="bool">1</connect>
+                  <collections type="string">Bones</collections>
+                  <roll sid="roll" type="float">0.02282238</roll>
+                  <tip_x sid="tip_x" type="float">0</tip_x>
+                  <tip_y sid="tip_y" type="float">0</tip_y>
+                  <tip_z sid="tip_z" type="float">-0.5</tip_z>
+                </technique>
+              </extra>
+            </node>
+            <extra>
+              <technique profile="blender">
+                <collections type="string">Bones</collections>
+              </technique>
+            </extra>
+          </node>
+          <node id="Armature_Bone_004" name="Bone.004" sid="Bone_004" type="JOINT">
+            <matrix sid="transform">1 0 0 0 0 -0.7834009 -0.6215168 1.38253 0 0.6215168 -0.7834011 0.529569 0 0 0 1</matrix>
+            <node id="Armature_Bone_005" name="Bone.005" sid="Bone_005" type="JOINT">
+              <matrix sid="transform">0.9997396 -9.31323e-10 0.0228204 0 0.01418326 0.783401 -0.6213548 0.2413451 -0.01787752 0.6215166 0.783197 -1.19209e-7 0 0 0 1</matrix>
+              <extra>
+                <technique profile="blender">
+                  <connect sid="connect" type="bool">1</connect>
+                  <collections type="string">Bones</collections>
+                  <roll sid="roll" type="float">0.02282238</roll>
+                  <tip_x sid="tip_x" type="float">0</tip_x>
+                  <tip_y sid="tip_y" type="float">0</tip_y>
+                  <tip_z sid="tip_z" type="float">-0.5</tip_z>
+                </technique>
+              </extra>
+            </node>
+            <extra>
+              <technique profile="blender">
+                <collections type="string">Bones</collections>
+              </technique>
+            </extra>
+          </node>
+          <extra>
+            <technique profile="blender">
+              <collections type="string">Bones</collections>
+            </technique>
+          </extra>
+        </node>
+        <node id="Armature_Bone_006" name="Bone.006" sid="Bone_006" type="JOINT">
+          <matrix sid="transform">1 0 0 0 0 0 1 0.25 0 -1 0 0 0 0 0 1</matrix>
+          <extra>
+            <technique profile="blender">
+              <collections type="string">Bones</collections>
+              <tip_x sid="tip_x" type="float">0</tip_x>
+              <tip_y sid="tip_y" type="float">0</tip_y>
+              <tip_z sid="tip_z" type="float">-1</tip_z>
+            </technique>
+          </extra>
+        </node>
+        <node id="Armature_Bone_007" name="Bone.007" sid="Bone_007" type="JOINT">
+          <matrix sid="transform">1 0 0 0 0 0 1 -0.25 0 -1 0 0 0 0 0 1</matrix>
+          <extra>
+            <technique profile="blender">
+              <collections type="string">Bones</collections>
+              <tip_x sid="tip_x" type="float">0</tip_x>
+              <tip_y sid="tip_y" type="float">0</tip_y>
+              <tip_z sid="tip_z" type="float">-1</tip_z>
+            </technique>
+          </extra>
+        </node>
+        <node id="Cylinder" name="Cylinder" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Cylinder-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <node id="Icosphere" name="Icosphere" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Icosphere-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <node id="Cylinder_001" name="Cylinder.001" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Cylinder_001-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <node id="Cylinder_003" name="Cylinder.003" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Cylinder_003-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <node id="Cylinder_002" name="Cylinder.002" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Cylinder_002-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <node id="Cylinder_004" name="Cylinder.004" type="NODE">
+          <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+          <instance_controller url="#Armature_Cylinder_004-skin">
+            <skeleton>#Armature_Bone</skeleton>
+            <skeleton>#Armature_Bone_006</skeleton>
+            <skeleton>#Armature_Bone_007</skeleton>
+          </instance_controller>
+        </node>
+        <extra>
+          <technique profile="blender">
+            <collections sid="collections" type="string">Bones</collections>
+            <visible_collections sid="visible_collections" type="string">Bones</visible_collections>
+            <active_collection sid="active_collection" type="string">Bones</active_collection>
+          </technique>
+        </extra>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
