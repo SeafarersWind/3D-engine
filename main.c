@@ -16,167 +16,14 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-	
 
-const char* vertexShaderSource =
-	"#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"layout (location = 1) in vec3 aNormal;\n"
-	"layout (location = 2) in vec2 aTexCoord;\n"
-	"layout (location = 3) in vec3 aCol;\n"
 
-	"out vec3 fragPos;\n"
-	"out vec3 normal;\n"
-	"out vec3 ourCol;\n"
-	"out vec2 texCoord;\n"
 
-	"uniform mat4 model;\n"
-	"uniform mat4 view;\n"
-	"uniform mat4 projection;\n"
 
-	"void main() {\n"
-	"   gl_Position = projection * view * model * vec4(aPos, 1.0);\n"
-	"	fragPos = vec3(model * vec4(aPos, 1.0f));\n"
-	"	normal = mat3(transpose(inverse(model))) * aNormal;\n"
-	"	ourCol = aCol;\n"
-	"	texCoord = aTexCoord;\n"
-	"}\0";
-
-const char* skelVertexShaderSource =
-	"#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"layout (location = 1) in vec3 aNormal;\n"
-	"layout (location = 2) in vec2 aTexCoord;\n"
-	"layout (location = 3) in vec3 aCol;\n"
-	"layout (location = 4) in ivec4 boneIds;\n" 
-	"layout (location = 5) in vec4 weights;\n"
-
-	"out vec3 fragPos;\n"
-	"out vec3 normal;\n"
-	"out vec3 ourCol;\n"
-	"out vec2 texCoord;\n"
-	
-	"const int MAX_BONES = 100;\n"
-	"const int MAX_BONE_INFLUENCE = 4;\n"
-	"uniform mat4 model;\n"
-	"uniform mat4 view;\n"
-	"uniform mat4 projection;\n"
-	"uniform mat4 bones[MAX_BONES];\n"
-	
-	"void main() {\n"
-	"	vec4 totalPosition = vec4(0.0f);\n"
-	"	vec3 totalNormal = vec3(0.0f);\n"
-	"	for(int i = 0; i < MAX_BONE_INFLUENCE; i++) {\n"
-	"		if(boneIds[i] == -1) { continue; }\n"
-	"		if(boneIds[i] >= MAX_BONES) {\n"
-	"			totalPosition = vec4(aPos, 1.0f);\n"
-	"			break;\n"
-	"		}\n"
-	"		vec4 localPosition = bones[boneIds[i]] * vec4(aPos, 1.0f);\n"
-	"		totalPosition += localPosition * weights[i];\n"
-	"		vec3 localNormal = mat3(bones[boneIds[i]]) * aNormal;\n"
-	"		totalNormal += localNormal * weights[i];\n"
-	"	}\n"
-	
-	"	mat4 viewModel = view * model;\n"
-	"	gl_Position = projection * viewModel * totalPosition;\n"
-	"	normal = mat3(transpose(inverse(model))) * totalNormal;\n"
-	"	texCoord = aTexCoord;\n"
-	"}\0";
-
-const char* fragmentShaderSource =
-	"#version 330 core\n"
-	"in vec3 fragPos;\n"
-	"in vec3 normal;\n"
-	"in vec3 ourCol;\n"
-	"in vec2 texCoord;\n"
-
-	"out vec4 FragColor;\n"
-	
-	"struct Material {\n"
-	"	float ambient;\n"
-	"	float diffuse;\n"
-	"	float specular;\n"
-	"	float shininess;\n"
-	"};\n"
-	
-	"struct Light {\n"
-	"	vec3 pos;\n"
-	"	vec3 color;\n"
-	"	float constant;\n"
-	"	float linear;\n"
-	"	float quadratic;\n"
-	"};\n"
-	
-	"uniform Material material;\n"
-	"uniform Light light;\n"
-	"uniform vec3 skyColor;\n"
-	"uniform sampler2D texture1;\n"
-	"uniform vec3 objectColor;\n"
-	"uniform vec3 viewPos;\n"
-	
-	"void main() {\n"
-	"	vec3 texCol = vec3(texture(texture1, texCoord).x);\n"
-	//"	vec3 col = texture(texture1, texCoord);\n"
-	"	vec3 col = objectColor;\n"
-	"	vec3 norm = normalize(normal);\n"
-	"	float avgObjectColor = (texCol.x + texCol.y + texCol.z) / 3.0f;\n"
-	"	vec3 lightDir = normalize(light.pos - fragPos);\n"
-	//"	vec3 lightDir = vec3(0.5f, 3.0f, 0.4f);\n"
-	"	float lightDist = length(light.pos - fragPos);\n"
-	"	float attenuation = 1.0 / (light.constant + light.linear*lightDist + light.quadratic*(lightDist*lightDist));"
-	"	vec3 viewDir = normalize(viewPos - fragPos);\n"
-	"	vec3 reflectDir = reflect(-lightDir, norm);\n"
-	
-	"	vec3 ambient = (light.color * attenuation) * material.ambient * col;\n"
-	
-	"	float diff = max((dot(norm, lightDir)+0.4f), 0.0f);\n"
-	"	vec3 diffuse = diff * material.diffuse * light.color * attenuation * col;\n"
-	
-	"	float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);\n"
-	"	vec3 specular = material.specular * spec * light.color * attenuation * (vec3(avgObjectColor*3.0f) + texCol/2.0f);\n"
-	
-	"	vec3 sky = skyColor * max((dot(norm/2.0f, vec3(0.0f, 1.0f, 0.0f))+0.4f), 0.0f);\n"
-	
-	"	FragColor = vec4(col * (ambient + diffuse + specular) + sky, 1.0f);\n"
-	//"FragColor = vec4(ourCol, 1.0f);\n"
-	"}\0";
-
-const char* billboardVertexShaderSource =
-	"#version 330 core\n"
-	"layout (location = 0) in vec2 aPos;\n"
-	
-	"out float size;\n"
-	
-	"uniform float aSize;\n"
-	"uniform vec4 viewModel;\n"
-	"uniform mat4 projection;\n"
-
-	"void main() {\n"
-	"	gl_Position = projection * (viewModel + vec4(aPos, 0.0f, 0.0f) * vec4(aSize));\n"
-	"	size = aSize;\n"
-	"}\0";
-
-const char* lightFragmentShaderSource =
-	"#version 330 core\n"
-	"in float size;\n"
-	
-	"out vec4 FragColor;\n"
-	
-	"uniform vec2 screenspaceCenter;\n"
-	"uniform float screenspaceRadius;\n"
-	"uniform vec3 lightColor;\n"
-
-	"void main() {\n"
-	"	float centerDistance = 1.0f - (distance(gl_FragCoord.xy, screenspaceCenter) / (screenspaceRadius*size));\n"
-	"	if(centerDistance <= 0.0f) discard;\n"
-	"	centerDistance = smoothstep(0.0f, 1.0f, centerDistance);\n"
-	"	FragColor = vec4(lightColor, centerDistance);\n"
-	"}\0";
-
-	  int   windowWidth  = 720;
-	  int   windowHeight =  720;
+int windowWidth  = 720;
+int windowHeight =  720;
 const char* windowTitle  = "Quiet Field";
+
 const double limitFPS = 1.0f / 20.0f;
 const double tickSpeed = 1.0f / 20.0f;
 
@@ -199,7 +46,6 @@ float cameraRoll;
 versor cameraOrientation;
 
 vec3 up   = {0.0f, 	1.0f, 0.0f};
-vec3 down = {0.0f, -1.0f, 0.0f};
 
 float clearG = 0.05;
 float clearB = 0.1;
@@ -215,6 +61,7 @@ int fade = 0;
 
 #define MAX_BONE_INFLUENCE 4
 #define MAX_BONE_WEIGHTS 4
+#define MAX_BONES 16
 
 
 
@@ -269,7 +116,6 @@ struct Terrain {
 };
 
 // struct Mesh meshes[256];
-unsigned char meshCount = 0;
 //unsigned int* textures;
 //unsigned int textureCount;
 
@@ -412,16 +258,101 @@ static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+GLFWwindow* initWindow() {
+	glfwSetErrorCallback(error_callback);
+	if(!glfwInit()) {
+		printf("Failed to initialize GLFW.");
+		return NULL;
+	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	windowWidth  = mode->width;
+	windowHeight = mode->height;
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, NULL);
+	if (!window) {
+		printf("Failed to create GLFW window.\n");
+		glfwTerminate();
+		return NULL;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	
+	if(!gladLoadGL(glfwGetProcAddress)) {
+		printf("Failed to initialize GLAD.\n");
+		glfwDestroyWindow(window);
+		glfwTerminate();
+		return NULL;
+	}
+	
+	glViewport(0, 0, windowWidth, windowHeight);
+	
+	return window;
+}
+
+
+
+GLuint createShader(char* shaderPath, GLenum shaderType) {
+	FILE* shaderFile = fopen(shaderPath, "rb");
+	fseek(shaderFile, 0, SEEK_END);
+	long shaderFileLength = ftell(shaderFile);
+	GLchar* shaderContent = malloc(shaderFileLength+1);
+	rewind(shaderFile);
+	fread(shaderContent, 1, shaderFileLength, shaderFile);
+	fclose(shaderFile);
+	
+	int success;
+	GLuint shader = glCreateShader(shaderType);
+	glShaderSource(shader, 1, (const GLchar**)&shaderContent, NULL);
+	glCompileShader(shader);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if(!success) {
+		char infoLog[512];
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		printf("%s:\n%s", shaderPath, infoLog);
+	}
+	
+	return shader;
+}
+
+GLuint createShaderProgram(char* programName, GLuint vertexShader, GLuint fragmentShader) {
+	int success;
+	GLuint shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if(!success) {
+		char infoLog[512];
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		printf("%s:\n%s", programName, infoLog);
+	}
+	
+	return shaderProgram;
+}
+
 
 
 struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
+printf("\n");
 	unsigned int verticesCount = aiMesh->mNumVertices;
 	struct Vertex* vertices = malloc(aiMesh->mNumVertices*sizeof(struct Vertex));
 	
 	unsigned int indexCount = 0;
 	for(unsigned int i = 0; i < aiMesh->mNumFaces; i++) { indexCount += aiMesh->mFaces[i].mNumIndices; }
 	unsigned int* indices = malloc(indexCount*sizeof(unsigned int));
-
+	
+	// vertices
 	for(unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
 		struct Vertex vertex;
 		vertex.position[0] = aiMesh->mVertices[i].x;
@@ -432,14 +363,14 @@ struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
 		vertex.normal[2] = aiMesh->mNormals[i].z;
 		vertex.texCoords[0] = aiMesh->mTextureCoords[0][i].x;
 		vertex.texCoords[1] = aiMesh->mTextureCoords[0][i].y;
-		vertices[i] = vertex;
 		for (int ii = 0; ii < MAX_BONE_WEIGHTS; ii++) {
 			vertex.m_BoneIDs[ii] = -1;
 			vertex.m_Weights[ii] = 0.0f;
 		}
+		vertices[i] = vertex;
 	}
-	//printf("\n\n\n\n\n\n\n\n");
 	
+	// indices
 	indexCount = 0;
 	for(unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
 		for(unsigned int j = 0; j < aiMesh->mFaces[i].mNumIndices; j++) {
@@ -448,6 +379,7 @@ struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
 		}
 	}
 	
+	// bones
 	char* boneIndicesNames[aiMesh->mNumBones];
 	unsigned int boneIndices[aiMesh->mNumBones];
 	unsigned int boneCount = 0;
@@ -460,17 +392,18 @@ struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
 			}
 		} if(ii >= boneCount) {
 			boneIndicesNames[boneCount] = boneName;
-			boneIndices[boneCount] = ii;
+			boneIndices[boneCount] = boneCount;
+printf("%d %s\n", boneCount, boneName);
 			boneCount++;
 		}
 	}
 	
-	char** boneNames = malloc(sizeof(char*)*boneCount);
+	char** boneNames = malloc(boneCount);
 	mat4* boneOffsets = malloc(sizeof(mat4)*boneCount);
 	
 	for(unsigned int i = 0; i < boneCount; i++) {
-		boneNames[i] = malloc(sizeof(char)*aiMesh->mBones[boneIndices[i]]->mName.length);
-		strncpy(boneNames[i], aiMesh->mBones[boneIndices[i]]->mName.data, aiMesh->mBones[boneIndices[i]]->mName.length);
+		boneNames[i] = malloc(aiMesh->mBones[boneIndices[i]]->mName.length+1);
+		strcpy(boneNames[i], aiMesh->mBones[boneIndices[i]]->mName.data);
 		
 		boneOffsets[i][0][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a1;
 		boneOffsets[i][0][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a2;
@@ -488,21 +421,25 @@ struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
 		boneOffsets[i][3][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d2;
 		boneOffsets[i][3][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d3;
 		boneOffsets[i][3][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d4;
+printf("%d %s \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", i, boneNames[i],
+ boneOffsets[i][0][0], boneOffsets[i][0][1], boneOffsets[i][0][2], boneOffsets[i][0][3],
+ boneOffsets[i][1][0], boneOffsets[i][1][1], boneOffsets[i][1][2], boneOffsets[i][1][3],
+ boneOffsets[i][2][0], boneOffsets[i][2][1], boneOffsets[i][2][2], boneOffsets[i][2][3],
+ boneOffsets[i][3][0], boneOffsets[i][3][1], boneOffsets[i][3][2], boneOffsets[i][3][3]);
 		
 		for(unsigned int ii = 0; ii < aiMesh->mBones[boneIndices[i]]->mNumWeights; ii++) {
 			struct aiVertexWeight weight = aiMesh->mBones[boneIndices[i]]->mWeights[ii];
 			for(unsigned int iii = 0; iii < MAX_BONE_INFLUENCE; iii++) {
 				if(vertices[weight.mVertexId].m_BoneIDs[iii] == -1 && weight.mWeight != 0.0f) {
+// printf("%f ", weight.mWeight);
 					vertices[weight.mVertexId].m_BoneIDs[iii] = i;
 					vertices[weight.mVertexId].m_Weights[iii] = weight.mWeight;
-printf("!");
 					break;
 				}
 			}
 		}
-printf("\n");
+// printf("\n");
 	}
-printf("\n\n");
 	
 	
 	
@@ -516,6 +453,14 @@ printf("\n\n");
 		.boneOffsets = boneOffsets,
 		.boneNames = boneNames
 	};
+printf("\n");
+for(unsigned int i = 0; i < verticesCount; i++) {
+	for(unsigned int ii = 0; ii < MAX_BONE_INFLUENCE; ii++) {
+		printf("%d %f ", vertices[i].m_BoneIDs[ii], vertices[i].m_Weights[ii]);
+	}
+	printf("\n");
+}
+printf("\n");
 	
 	glGenVertexArrays(1, &finalMesh.VAO);
 	glGenBuffers(1, &finalMesh.VBO);
@@ -549,6 +494,8 @@ printf("\n\n");
 	return finalMesh;
 }
 
+unsigned int meshCount;
+
 void processNode(struct aiNode* node, struct Mesh* meshes, const struct aiScene* scene) {
 	for(unsigned int i = 0; i < node->mNumMeshes; i++) {
 		struct aiMesh *aiMesh = scene->mMeshes[node->mMeshes[i]]; 
@@ -562,9 +509,7 @@ void processNode(struct aiNode* node, struct Mesh* meshes, const struct aiScene*
 
 unsigned int countMeshes(struct aiNode* node) {
 	unsigned int meshCount = node->mNumMeshes;
-	for(unsigned int i = 0; i < node->mNumChildren; i++) {
-		meshCount += countMeshes(node->mChildren[i]);
-	}
+	for(unsigned int i = 0; i < node->mNumChildren; i++) meshCount += countMeshes(node->mChildren[i]);
 	return meshCount;
 }
 
@@ -617,20 +562,22 @@ struct Model loadModel(char* modelPath) {
 	struct Model model;
 	
 	const struct aiScene* scene = aiImportFile( modelPath,
-	aiProcess_CalcTangentSpace       |
-	aiProcess_Triangulate            |
-	aiProcess_JoinIdenticalVertices  |
-	aiProcess_SortByPType);
+	 aiProcess_CalcTangentSpace       |
+	 aiProcess_Triangulate            |
+	 aiProcess_JoinIdenticalVertices  |
+	 aiProcess_SortByPType);
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		printf(aiGetErrorString());
 		return model;
 	}
 	
+	// meshes
 	model.meshCount = countMeshes(scene->mRootNode);
 	model.meshes = malloc(model.meshCount*sizeof(struct Mesh));
 	meshCount = 0;
 	processNode(scene->mRootNode, model.meshes, scene);
 	
+	// textures
 	model.textures = malloc(scene->mNumMaterials*sizeof(unsigned int));
 	glGenTextures(scene->mNumMaterials, model.textures);
 	char* texPath = (char*)malloc(256*sizeof(char));
@@ -655,6 +602,7 @@ struct Model loadModel(char* modelPath) {
 		}
 		stbi_image_free(texData);
 	}
+	free(texPath);
 	
 	aiReleaseImport(scene);
 	
@@ -663,8 +611,8 @@ struct Model loadModel(char* modelPath) {
 
 struct Object createObject(struct Model model) {
 	struct Object object;
-	object.model = model;
 	
+	object.model = model;
 	object.pos[0] = 0.0f;
 	object.pos[1] = 0.0f;
 	object.pos[2] = 0.0f;
@@ -681,127 +629,26 @@ struct Object createObject(struct Model model) {
 
 
 int main(void) {
-	glfwSetErrorCallback(error_callback);
-	if(!glfwInit()) {
-		printf("Failed to initialize GLFW.");
-		return -1;
-	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-	windowWidth  = mode->width;
-	windowHeight = mode->height;
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, NULL);
-	// GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, 0, NULL);
-	if (!window) {
-		printf("Failed to create GLFW window.\n");
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	
-	if(!gladLoadGL(glfwGetProcAddress)) {
-		printf("Failed to initialize GLAD.\n");
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		return -1;
-	}
-	
-	glViewport(0, 0, windowWidth, windowHeight);
+	GLFWwindow* window = initWindow();
+	if(!window) return -1;
 	
 	
-	int success;
-	char infoLog[512];
 	
-	int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		printf(infoLog);
-	}
+	// shaders
+	int vertexShader = createShader("vertexShader.glsl", GL_VERTEX_SHADER);
+	int skelVertexShader = createShader("vertexShaderSkel.glsl", GL_VERTEX_SHADER);
+	int billboardVertexShader = createShader("vertexShaderBillboard.glsl", GL_VERTEX_SHADER);
+	int fragmentShader = createShader("fragmentShader.glsl", GL_FRAGMENT_SHADER);
+	int lightFragmentShader = createShader("fragmentShaderLight.glsl", GL_FRAGMENT_SHADER);
 	
-	int skelVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(skelVertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(skelVertexShader);
-	glGetShaderiv(skelVertexShader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		glGetShaderInfoLog(skelVertexShader, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int billboardVertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(billboardVertexShader, 1, &billboardVertexShaderSource, NULL);
-	glCompileShader(billboardVertexShader);
-	glGetShaderiv(billboardVertexShader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		glGetShaderInfoLog(billboardVertexShader, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int lightFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(lightFragmentShader, 1, &lightFragmentShaderSource, NULL);
-	glCompileShader(lightFragmentShader);
-	glGetShaderiv(lightFragmentShader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		glGetShaderInfoLog(lightFragmentShader, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if(!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int skelShaderProgram = glCreateProgram();
-	glAttachShader(skelShaderProgram, skelVertexShader);
-	glAttachShader(skelShaderProgram, fragmentShader);
-	glLinkProgram(skelShaderProgram);
-	glGetProgramiv(skelShaderProgram, GL_LINK_STATUS, &success);
-	if(!success) {
-		glGetProgramInfoLog(skelShaderProgram, 512, NULL, infoLog);
-		printf(infoLog);
-	}
-	
-	int lightShaderProgram = glCreateProgram();
-	glAttachShader(lightShaderProgram, billboardVertexShader);
-	glAttachShader(lightShaderProgram, lightFragmentShader);
-	glLinkProgram(lightShaderProgram);
-	glGetProgramiv(lightShaderProgram, GL_LINK_STATUS, &success);
-	if(!success) {
-		glGetProgramInfoLog(lightShaderProgram, 512, NULL, infoLog);
-		printf(infoLog);
-	}
+	int shaderProgram = createShaderProgram("shaderProgram", vertexShader, fragmentShader);
+	int skelShaderProgram = createShaderProgram("skelShaderProgram", skelVertexShader, fragmentShader);
+	int lightShaderProgram = createShaderProgram("lightShaderProgram", billboardVertexShader, lightFragmentShader);
 	
 	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	glDeleteShader(skelVertexShader);
 	glDeleteShader(billboardVertexShader);
+	glDeleteShader(fragmentShader);
 	glDeleteShader(lightFragmentShader);
 	
 	glUseProgram(shaderProgram);
@@ -815,25 +662,17 @@ int main(void) {
 	struct Terrain geometry = createTerrain("assets/Terrain/Field.obj");
 	
 	
+	
 	// objects
-	struct Object icosa = createObject(loadModel("assets/Character/icosa.obj"));
-// for(int i = 0; i < icosa.model.meshCount; i++) {
-// 	printf("%d:\n", icosa.model.meshes[i].boneCount);
-// 	for(int ii = 0; ii < icosa.model.meshes[i].boneCount; ii++) {
-// 		for(int iii = 0; iii < 4; iii++) {
-// 			for(int iiii = 0; iiii < 4; iiii++) {
-// 				printf("%f, ", icosa.model.meshes[i].boneOffsets[ii][iii][iiii]);
-// 			}
-// 			printf("\n");
-// 		}
-// 		printf("\n");
-// 	}
-// 	printf("\n\n\n");
-// }
+	struct Object icosa = createObject(loadModel("assets/Character/icosa2.dae"));
+	icosa.pos[0] = 200.0f;
+	icosa.pos[1] = 100.0f;
+	icosa.pos[2] = 200.0f;
 	
 	const unsigned int objectCount = 1;
 	struct Object objects[objectCount];
 	objects[0] = icosa;
+	
 	
 	
 	// light
@@ -884,6 +723,7 @@ int main(void) {
 	
 	
 	
+	// time
 	double nowTime;
 	double lastTime = glfwGetTime();
 	double deltaTime = 0.0;
@@ -1061,6 +901,8 @@ int main(void) {
 			//model matrix
 			mat4 modelMat;
 			
+			
+			
 			// terrain
 			glUseProgram(shaderProgram);
 			glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, (GLfloat*)viewMat);
@@ -1089,6 +931,7 @@ int main(void) {
 			}
 			
 			
+			
 			// objects
 			glUseProgram(skelShaderProgram);
 			glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "view"), 1, GL_FALSE, (GLfloat*)viewMat);
@@ -1105,7 +948,7 @@ int main(void) {
 			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.diffuse"), 0.8f);
 			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.specular"), 0.0f);
 			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.shininess"), 4.0f);
-			glUniform3f(glGetUniformLocation(skelShaderProgram, "objectColor"), 0.8f, 0.5f, 0.4f);
+			glUniform3f(glGetUniformLocation(skelShaderProgram, "objectColor"), /*0.8f, 0.5f, 0.4f*/ 0.0f, 0.0f, 0.0f);
 			vec3 modelRotX = { 1.0f, 0.0f, 0.0f };
 			vec3 modelRotY = { 0.0f, 1.0f, 0.0f };
 			vec3 modelRotZ = { 0.0f, 0.0f, 1.0f };
@@ -1120,13 +963,14 @@ int main(void) {
 				for(int ii = 0; ii < objects[i].model.meshCount; ii++) {
 					glBindTexture(GL_TEXTURE_2D, objects[i].model.textures[objects[i].model.meshes[ii].material]);
 					glBindVertexArray(objects[i].model.meshes[ii].VAO);
-					glUniformMatrix4fv( glGetUniformLocation(skelShaderProgram, "bones"),
-						objects[i].model.meshes[ii].boneCount, GL_FALSE,
-						(float*)objects[i].model.meshes[ii].boneOffsets );
+					glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "bones"),
+					 objects[i].model.meshes[ii].boneCount, GL_FALSE,
+					 (float*)objects[i].model.meshes[ii].boneOffsets );
 					glDrawElements(GL_TRIANGLES, objects[i].model.meshes[ii].indexCount, GL_UNSIGNED_INT, 0);
 					glBindVertexArray(0);
 				}
 			}
+			
 			
 			
 			// light
