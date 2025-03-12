@@ -3,4 +3,4 @@ This is the product of my study of OpenGL. I aspire develop games and their engi
 
 The code has several dependencies and I won't provide build instructions, but all the demos I've created are available in the releases page.
 
-Currently I am working on bones and animation. This project is on hold for the time being.
+Currently I am working on bones and animation.
