@@ -19,20 +19,19 @@
 
 
 
+#define WINDOW_WIDTH  720
+#define WINDOW_HEIGHT 720
+#define WINDOW_TITLE "Quiet Field"
+#define WINDOW_FULLSCREEN true
 
-int windowWidth  = 720;
-int windowHeight =  720;
-const char* windowTitle  = "Quiet Field";
+const double FRAMES_PER_SECOND = 1.0f / 20.0f;
+const double TICK_SPEED = 1.0f / 20.0f;
 
-const double limitFPS = 1.0f / 20.0f;
-const double tickSpeed = 1.0f / 20.0f;
+const float CAMERA_SPEED = 0.04f;	
+const float CAMERA_SENSITIVITY = 0.002f;
 
-bool inW, inS, inA, inD, inSpace, inLeftShift;
-float lastX,lastY;
-bool firstMouse = true;
+const vec3 UP = {0.0f, 1.0f, 0.0f};
 
-const float cameraSpeed = 0.04f;	
-const float cameraSensitivity = 0.002f;
 vec3 cameraPos   = {0.0f, 1.0f, 0.0f};
 vec3 cameraFront = {-1.0f, 0.0f, 0.0f};
 vec3 cameraUp    = {0.0f, 1.0f, 0.0f};
@@ -44,8 +43,6 @@ float cameraYaw  = -0.5f*M_PI;
 float cameraPitch = -0.0625*M_PI;
 float cameraRoll;
 versor cameraOrientation;
-
-vec3 up   = {0.0f, 	1.0f, 0.0f};
 
 float clearG = 0.05;
 float clearB = 0.1;
@@ -59,591 +56,38 @@ float clearMinB = -0.05f;
 int col = 0;
 int fade = 0;
 
-#define MAX_BONE_INFLUENCE 4
-#define MAX_BONE_WEIGHTS 4
-#define MAX_BONES 16
 
 
+#include "Window.c"
 
-struct Vertex {
-	vec3 position;
-	vec3 normal;
-	vec2 texCoords;
-	unsigned int m_BoneIDs[MAX_BONE_INFLUENCE];
-	float m_Weights[MAX_BONE_INFLUENCE];
-};
+#include "Shader.c"
 
-struct Bone {
-	char* name;
-	mat4 offset;
-};
-
-struct Mesh {
-	struct Vertex* vertices;
-	unsigned int verticesCount;
-	
-	unsigned int* indices;
-	unsigned int indexCount;
-	
-	unsigned int boneCount;
-	char** boneNames;
-	mat4* boneOffsets;
-	
-	unsigned int material;
-	
-	unsigned int VAO, VBO, EBO;
-};
-
-struct Model {
-	struct Mesh* meshes;
-	unsigned int meshCount;
-	unsigned int* textures;
-	unsigned int textureCount;
-};
-
-struct Object {
-	struct Model model;
-	vec3 pos;
-	vec3 rot;
-	vec3 scale;
-};
-
-struct Terrain {
-	vec3* vertices;
-	unsigned int vertexCount;
-	unsigned int* indices;
-	unsigned int faceCount;
-};
-
-// struct Mesh meshes[256];
-//unsigned int* textures;
-//unsigned int textureCount;
-
-
-
-static void error_callback(int error, const char* description) {
-	fprintf(stderr, "Error: %s\n", description);
-}
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-	switch(action) {
-	case GLFW_PRESS:
-		switch(key) {
-		case GLFW_KEY_W:
-			inW = true;
-			break;
-		case GLFW_KEY_S:
-			inS = true;
-			break;
-		case GLFW_KEY_A:
-			inA = true;
-			break;
-		case GLFW_KEY_D:
-			inD = true;
-			break;
-		case GLFW_KEY_SPACE:
-			inSpace = true;
-			break;
-		case GLFW_KEY_LEFT_SHIFT:
-			inLeftShift = true;
-			break;
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(window, GLFW_TRUE);
-			break;
-		}
-		break;
-	case GLFW_RELEASE:
-		switch(key) {
-		case GLFW_KEY_W:
-			inW = false;
-			break;
-		case GLFW_KEY_S:
-			inS = false;
-			break;
-		case GLFW_KEY_A:
-			inA = false;
-			break;
-		case GLFW_KEY_D:
-			inD = false;
-			break;
-		case GLFW_KEY_SPACE:
-			inSpace = false;
-			break;
-		case GLFW_KEY_LEFT_SHIFT:
-			inLeftShift = false;
-			break;
-		}
-	}
-	
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GLFW_TRUE);
-}
-
-void mouse_callback(GLFWwindow* window, double xPos, double yPos) {
-	if(firstMouse) {
-		lastX = xPos;
-		lastY = yPos;
-		firstMouse = false;
-	}
-	float xOffset = lastX - xPos;
-	float yOffset = lastY - yPos;
-	lastX = xPos;
-	lastY = yPos;
-	
-	
-	#ifdef WALKAROUND
-	cameraYaw   -= xOffset * cameraSensitivity;	// walkaround camera
-	cameraPitch += yOffset * cameraSensitivity;
-	
-	if     (cameraYaw >=  M_PI) cameraYaw -= 2.0f*M_PI;
-	else if(cameraYaw <= -M_PI) cameraYaw += 2.0f*M_PI;
-	if     (cameraPitch >=  M_PI) cameraPitch -= 2.0f*M_PI;
-	else if(cameraPitch <= -M_PI) cameraPitch += 2.0f*M_PI;
-	if     (cameraRoll >=  M_PI) cameraPitch -= 2.0f*M_PI;
-	else if(cameraRoll <= -M_PI) cameraPitch += 2.0f*M_PI;
-	
-	cameraDirection[0] = cos(cameraYaw) * cos(cameraPitch);
-	cameraDirection[1] = sin(cameraPitch);
-	cameraDirection[2] = sin(cameraYaw) * cos(cameraPitch);
-	glm_normalize_to(cameraDirection, cameraFront);
-	if(cameraPitch < 0.5*M_PI && cameraPitch > -0.5*M_PI) {
-		glm_vec3_crossn(cameraFront, cameraUp, cameraRight);
-	} else {
-		glm_vec3_crossn(cameraFront, cameraDown, cameraRight);
-	}
-	
-	
-	#elif defined(FLYAROUND)
-	float controlYaw   = xOffset * cameraSensitivity;		// flyaround camera
-	float controlPitch = yOffset * cameraSensitivity;
-	glm_vec3_rotate(cameraFront, controlYaw, cameraUp);
-	glm_vec3_rotate(cameraRight, controlYaw, cameraUp);
-	glm_vec3_rotate(cameraFront, controlPitch, cameraRight);
-	glm_vec3_rotate(cameraUp, controlPitch, cameraRight);
-	
-	
-	#elif defined(ICOSA)
-	cameraYaw   -= xOffset * cameraSensitivity;				// orbit icosa
-	cameraPitch += yOffset * cameraSensitivity;
-	
-	if(cameraPitch >  0.5*M_PI) { cameraPitch =  0.5*M_PI; }
-	if(cameraPitch < -0.5*M_PI) { cameraPitch = -0.5*M_PI; }
-	if     (cameraYaw >=  M_PI) cameraYaw -= 2.0f*M_PI;
-	else if(cameraYaw <= -M_PI) cameraYaw += 2.0f*M_PI;
-	if     (cameraRoll >=  M_PI) cameraPitch -= 2.0f*M_PI;
-	else if(cameraRoll <= -M_PI) cameraPitch += 2.0f*M_PI;
-	
-	vec3 cameraDirection = {
-		cos(cameraYaw) * cos(cameraPitch),
-		sin(cameraPitch),
-		sin(cameraYaw) * cos(cameraPitch)
-	};
-	glm_normalize_to(cameraDirection, cameraFront);
-	
-	cameraRight[0] = -sin(cameraYaw);
-	cameraRight[1] = 0.0f;
-	cameraRight[2] = cos(cameraYaw);
-	glm_normalize(cameraRight);
-	
-	cameraUp[0] = -cos(cameraYaw) * sin(cameraPitch);
-	cameraUp[1] =  cos(cameraPitch);
-	cameraUp[2] = -sin(cameraYaw) * sin(cameraPitch);
-	glm_normalize(cameraUp);
-	
-	glm_quat_for(cameraDirection, cameraUp, cameraOrientation);
-	#endif
-}
-
-static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
-GLFWwindow* initWindow() {
-	glfwSetErrorCallback(error_callback);
-	if(!glfwInit()) {
-		printf("Failed to initialize GLFW.");
-		return NULL;
-	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-	windowWidth  = mode->width;
-	windowHeight = mode->height;
-	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, windowTitle, monitor, NULL);
-	if (!window) {
-		printf("Failed to create GLFW window.\n");
-		glfwTerminate();
-		return NULL;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetKeyCallback(window, key_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	
-	if(!gladLoadGL(glfwGetProcAddress)) {
-		printf("Failed to initialize GLAD.\n");
-		glfwDestroyWindow(window);
-		glfwTerminate();
-		return NULL;
-	}
-	
-	glViewport(0, 0, windowWidth, windowHeight);
-	
-	return window;
-}
-
-
-
-GLuint createShader(char* shaderPath, GLenum shaderType) {
-	FILE* shaderFile = fopen(shaderPath, "rb");
-	fseek(shaderFile, 0, SEEK_END);
-	long shaderFileLength = ftell(shaderFile);
-	GLchar* shaderContent = malloc(shaderFileLength+1);
-	rewind(shaderFile);
-	fread(shaderContent, 1, shaderFileLength, shaderFile);
-	fclose(shaderFile);
-	
-	int success;
-	GLuint shader = glCreateShader(shaderType);
-	glShaderSource(shader, 1, (const GLchar**)&shaderContent, NULL);
-	glCompileShader(shader);
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-	if(!success) {
-		char infoLog[512];
-		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		printf("%s:\n%s", shaderPath, infoLog);
-	}
-	
-	return shader;
-}
-
-GLuint createShaderProgram(char* programName, GLuint vertexShader, GLuint fragmentShader) {
-	int success;
-	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if(!success) {
-		char infoLog[512];
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		printf("%s:\n%s", programName, infoLog);
-	}
-	
-	return shaderProgram;
-}
-
-
-
-struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
-printf("\n");
-	unsigned int verticesCount = aiMesh->mNumVertices;
-	struct Vertex* vertices = malloc(aiMesh->mNumVertices*sizeof(struct Vertex));
-	
-	unsigned int indexCount = 0;
-	for(unsigned int i = 0; i < aiMesh->mNumFaces; i++) { indexCount += aiMesh->mFaces[i].mNumIndices; }
-	unsigned int* indices = malloc(indexCount*sizeof(unsigned int));
-	
-	// vertices
-	for(unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
-		struct Vertex vertex;
-		vertex.position[0] = aiMesh->mVertices[i].x;
-		vertex.position[1] = aiMesh->mVertices[i].y;
-		vertex.position[2] = aiMesh->mVertices[i].z;
-		vertex.normal[0] = aiMesh->mNormals[i].x;
-		vertex.normal[1] = aiMesh->mNormals[i].y;
-		vertex.normal[2] = aiMesh->mNormals[i].z;
-		vertex.texCoords[0] = aiMesh->mTextureCoords[0][i].x;
-		vertex.texCoords[1] = aiMesh->mTextureCoords[0][i].y;
-		for (int ii = 0; ii < MAX_BONE_WEIGHTS; ii++) {
-			vertex.m_BoneIDs[ii] = -1;
-			vertex.m_Weights[ii] = 0.0f;
-		}
-		vertices[i] = vertex;
-	}
-	
-	// indices
-	indexCount = 0;
-	for(unsigned int i = 0; i < aiMesh->mNumFaces; i++) {
-		for(unsigned int j = 0; j < aiMesh->mFaces[i].mNumIndices; j++) {
-			indices[indexCount] = aiMesh->mFaces[i].mIndices[j];
-			indexCount++;
-		}
-	}
-	
-	// bones
-	char* boneIndicesNames[aiMesh->mNumBones];
-	unsigned int boneIndices[aiMesh->mNumBones];
-	unsigned int boneCount = 0;
-	for(unsigned int i = 0; i < aiMesh->mNumBones; i++) {
-		char* boneName = aiMesh->mBones[i]->mName.data;
-		unsigned int ii;
-		for(ii = 0; ii < boneCount; ii++) {
-			if(strcmp(boneName, boneIndicesNames[ii]) == 0) {
-				break;
-			}
-		} if(ii >= boneCount) {
-			boneIndicesNames[boneCount] = boneName;
-			boneIndices[boneCount] = boneCount;
-printf("%d %s\n", boneCount, boneName);
-			boneCount++;
-		}
-	}
-	
-	char** boneNames = malloc(boneCount);
-	mat4* boneOffsets = malloc(sizeof(mat4)*boneCount);
-	
-	for(unsigned int i = 0; i < boneCount; i++) {
-		boneNames[i] = malloc(aiMesh->mBones[boneIndices[i]]->mName.length+1);
-		strcpy(boneNames[i], aiMesh->mBones[boneIndices[i]]->mName.data);
-		
-		boneOffsets[i][0][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a1;
-		boneOffsets[i][0][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a2;
-		boneOffsets[i][0][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a3;
-		boneOffsets[i][0][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a4;
-		boneOffsets[i][1][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b1;
-		boneOffsets[i][1][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b2;
-		boneOffsets[i][1][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b3;
-		boneOffsets[i][1][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b4;
-		boneOffsets[i][2][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c1;
-		boneOffsets[i][2][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c2;
-		boneOffsets[i][2][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c3;
-		boneOffsets[i][2][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c4;
-		boneOffsets[i][3][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d1;
-		boneOffsets[i][3][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d2;
-		boneOffsets[i][3][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d3;
-		boneOffsets[i][3][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d4;
-printf("%d %s \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", i, boneNames[i],
- boneOffsets[i][0][0], boneOffsets[i][0][1], boneOffsets[i][0][2], boneOffsets[i][0][3],
- boneOffsets[i][1][0], boneOffsets[i][1][1], boneOffsets[i][1][2], boneOffsets[i][1][3],
- boneOffsets[i][2][0], boneOffsets[i][2][1], boneOffsets[i][2][2], boneOffsets[i][2][3],
- boneOffsets[i][3][0], boneOffsets[i][3][1], boneOffsets[i][3][2], boneOffsets[i][3][3]);
-		
-		for(unsigned int ii = 0; ii < aiMesh->mBones[boneIndices[i]]->mNumWeights; ii++) {
-			struct aiVertexWeight weight = aiMesh->mBones[boneIndices[i]]->mWeights[ii];
-			for(unsigned int iii = 0; iii < MAX_BONE_INFLUENCE; iii++) {
-				if(vertices[weight.mVertexId].m_BoneIDs[iii] == -1 && weight.mWeight != 0.0f) {
-// printf("%f ", weight.mWeight);
-					vertices[weight.mVertexId].m_BoneIDs[iii] = i;
-					vertices[weight.mVertexId].m_Weights[iii] = weight.mWeight;
-					break;
-				}
-			}
-		}
-// printf("\n");
-	}
-	
-	
-	
-	struct Mesh finalMesh = {
-		.vertices = vertices,
-		.verticesCount = verticesCount,
-		.indices = indices,
-		.indexCount = indexCount,
-		.material = aiMesh->mMaterialIndex,
-		.boneCount = boneCount,
-		.boneOffsets = boneOffsets,
-		.boneNames = boneNames
-	};
-printf("\n");
-for(unsigned int i = 0; i < verticesCount; i++) {
-	for(unsigned int ii = 0; ii < MAX_BONE_INFLUENCE; ii++) {
-		printf("%d %f ", vertices[i].m_BoneIDs[ii], vertices[i].m_Weights[ii]);
-	}
-	printf("\n");
-}
-printf("\n");
-	
-	glGenVertexArrays(1, &finalMesh.VAO);
-	glGenBuffers(1, &finalMesh.VBO);
-	glGenBuffers(1, &finalMesh.EBO);
-	
-	glBindVertexArray(finalMesh.VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, finalMesh.VBO);
-	glBufferData(GL_ARRAY_BUFFER, finalMesh.verticesCount*sizeof(*finalMesh.vertices), &finalMesh.vertices[0].position[0], GL_STATIC_DRAW);
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, finalMesh.EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, finalMesh.indexCount*sizeof(*finalMesh.indices), &finalMesh.indices[0], GL_STATIC_DRAW);
-	
-	// position attribute
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(*finalMesh.vertices), (void*)0);
-	// normal attribute
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(*finalMesh.vertices), (void*)offsetof(struct Vertex, normal));
-	// texture attribute
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(*finalMesh.vertices), (void*)offsetof(struct Vertex, texCoords));
-	// bone id attribute
-	glEnableVertexAttribArray(4);
-	glVertexAttribIPointer(4, 4, GL_INT, sizeof(struct Vertex), (void*)offsetof(struct Vertex, m_BoneIDs));
-	// bone weight attribute
-	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(struct Vertex), (void*)offsetof(struct Vertex, m_Weights));
-	
-	glBindVertexArray(0);
-	
-	return finalMesh;
-}
-
-unsigned int meshCount;
-
-void processNode(struct aiNode* node, struct Mesh* meshes, const struct aiScene* scene) {
-	for(unsigned int i = 0; i < node->mNumMeshes; i++) {
-		struct aiMesh *aiMesh = scene->mMeshes[node->mMeshes[i]]; 
-		meshes[meshCount] = processMesh(aiMesh, scene);
-		meshCount++;
-	}
-	for(unsigned int i = 0; i < node->mNumChildren; i++) {
-		processNode(node->mChildren[i], meshes, scene);
-	}
-}
-
-unsigned int countMeshes(struct aiNode* node) {
-	unsigned int meshCount = node->mNumMeshes;
-	for(unsigned int i = 0; i < node->mNumChildren; i++) meshCount += countMeshes(node->mChildren[i]);
-	return meshCount;
-}
-
-struct Terrain createTerrain(char* modelPath) {
-	struct Terrain terrain;
-	
-	const struct aiScene* scene = aiImportFile( modelPath,
-	aiProcess_CalcTangentSpace       |
-	aiProcess_Triangulate            |
-	aiProcess_JoinIdenticalVertices  |
-	aiProcess_SortByPType);
-	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		printf(aiGetErrorString());
-		return terrain;
-	}
-	
-	terrain.vertexCount = 0;
-	terrain.faceCount = 0;
-	for(unsigned int i = 0; i < scene->mNumMeshes; i++) {
-		terrain.vertexCount += scene->mMeshes[i]->mNumVertices;
-		terrain.faceCount += scene->mMeshes[i]->mNumFaces;
-	}
-	
-	terrain.vertices = malloc(terrain.vertexCount*sizeof(vec3));
-	terrain.indices  = malloc(terrain.faceCount*3*sizeof(unsigned int));
-	
-	unsigned int vertexIndex = 0;
-	unsigned int indexIndex  = 0;
-	for(unsigned int i = 0; i < scene->mNumMeshes; i++) {
-		for(unsigned int ii = 0; ii < scene->mMeshes[i]->mNumVertices; ii++) {
-			terrain.vertices[vertexIndex][0] = scene->mMeshes[i]->mVertices[ii].x;
-			terrain.vertices[vertexIndex][1] = scene->mMeshes[i]->mVertices[ii].y;
-			terrain.vertices[vertexIndex][2] = scene->mMeshes[i]->mVertices[ii].z;
-			vertexIndex++;
-		}
-		for(unsigned int ii = 0; ii < scene->mMeshes[i]->mNumFaces; ii++) {
-			terrain.indices[indexIndex*3]   = scene->mMeshes[i]->mFaces[ii].mIndices[0];
-			terrain.indices[indexIndex*3+1] = scene->mMeshes[i]->mFaces[ii].mIndices[1];
-			terrain.indices[indexIndex*3+2] = scene->mMeshes[i]->mFaces[ii].mIndices[2];
-			indexIndex++;
-		}
-	}
-	
-	aiReleaseImport(scene);
-	
-	return terrain;
-}
-
-struct Model loadModel(char* modelPath) {
-	struct Model model;
-	
-	const struct aiScene* scene = aiImportFile( modelPath,
-	 aiProcess_CalcTangentSpace       |
-	 aiProcess_Triangulate            |
-	 aiProcess_JoinIdenticalVertices  |
-	 aiProcess_SortByPType);
-	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-		printf(aiGetErrorString());
-		return model;
-	}
-	
-	// meshes
-	model.meshCount = countMeshes(scene->mRootNode);
-	model.meshes = malloc(model.meshCount*sizeof(struct Mesh));
-	meshCount = 0;
-	processNode(scene->mRootNode, model.meshes, scene);
-	
-	// textures
-	model.textures = malloc(scene->mNumMaterials*sizeof(unsigned int));
-	glGenTextures(scene->mNumMaterials, model.textures);
-	char* texPath = (char*)malloc(256*sizeof(char));
-	unsigned int texPathLength = strrchr(modelPath, '/')+1 - modelPath;
-	strncpy(texPath, modelPath, texPathLength);
-	for(unsigned int i = 1; i < scene->mNumMaterials; i++) {	
-		struct aiString texStr;
-		aiGetMaterialTexture(scene->mMaterials[i], aiTextureType_DIFFUSE, 0, &texStr, (void*)0, (void*)0, (void*)0, (void*)0, (void*)0, (void*)0);
-		strcpy(&texPath[texPathLength], texStr.data);
-		int texWidth, texHeight, nrChannels;
-		glBindTexture(GL_TEXTURE_2D, model.textures[i]);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		unsigned char *texData = stbi_load(texPath, &texWidth, &texHeight, &nrChannels, 0);
-		if(texData) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-			glGenerateMipmap(GL_TEXTURE_2D);
-		} else {
-			printf("Failed to load texture \"%s\".\n", texPath);
-		}
-		stbi_image_free(texData);
-	}
-	free(texPath);
-	
-	aiReleaseImport(scene);
-	
-	return model;
-}
-
-struct Object createObject(struct Model model) {
-	struct Object object;
-	
-	object.model = model;
-	object.pos[0] = 0.0f;
-	object.pos[1] = 0.0f;
-	object.pos[2] = 0.0f;
-	object.rot[0] = 0.0f;
-	object.rot[1] = 0.0f;
-	object.rot[2] = 0.0f;
-	object.scale[0] = 1.0f;
-	object.scale[1] = 1.0f;
-	object.scale[2] = 1.0f;
-	
-	return object;
-}
-
-
+#include "Model.c"
 
 int main(void) {
-	GLFWwindow* window = initWindow();
+	GLFWwindow* window = initWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_FULLSCREEN);
 	if(!window) return -1;
 	
 	
 	
 	// shaders
 	int vertexShader = createShader("vertexShader.glsl", GL_VERTEX_SHADER);
+	if(!vertexShader) return -1;
 	int skelVertexShader = createShader("vertexShaderSkel.glsl", GL_VERTEX_SHADER);
+	if(!skelVertexShader) return -1;
 	int billboardVertexShader = createShader("vertexShaderBillboard.glsl", GL_VERTEX_SHADER);
+	if(!billboardVertexShader) return -1;
 	int fragmentShader = createShader("fragmentShader.glsl", GL_FRAGMENT_SHADER);
+	if(!fragmentShader) return -1;
 	int lightFragmentShader = createShader("fragmentShaderLight.glsl", GL_FRAGMENT_SHADER);
+	if(!lightFragmentShader) return -1;
 	
 	int shaderProgram = createShaderProgram("shaderProgram", vertexShader, fragmentShader);
-	int skelShaderProgram = createShaderProgram("skelShaderProgram", skelVertexShader, fragmentShader);
+	if(!shaderProgram) return -1;
+	int charShaderProgram = createShaderProgram("charShaderProgram", vertexShader, fragmentShader);
+	if(!charShaderProgram) return -1;
 	int lightShaderProgram = createShaderProgram("lightShaderProgram", billboardVertexShader, lightFragmentShader);
+	if(!lightShaderProgram) return -1;
 	
 	glDeleteShader(vertexShader);
 	glDeleteShader(skelVertexShader);
@@ -651,7 +95,7 @@ int main(void) {
 	glDeleteShader(fragmentShader);
 	glDeleteShader(lightFragmentShader);
 	
-	glUseProgram(shaderProgram);
+	glUseProgram(charShaderProgram);
 	glUniform1i(glGetUniformLocation(shaderProgram, "texture1"), 0);
 	glUniform3f(glGetUniformLocation(shaderProgram, "objectColor"), 0.0f, 0.7f, 1.0f);
 	
@@ -664,10 +108,10 @@ int main(void) {
 	
 	
 	// objects
-	struct Object icosa = createObject(loadModel("assets/Character/icosa2.dae"));
-	icosa.pos[0] = 200.0f;
-	icosa.pos[1] = 100.0f;
-	icosa.pos[2] = 200.0f;
+	struct Object icosa = createObject(loadModel("assets/Character/icosa.obj"));
+	icosa.pos[0] = 00.0f;
+	icosa.pos[1] = 00.0f;
+	icosa.pos[2] = 00.0f;
 	
 	const unsigned int objectCount = 1;
 	struct Object objects[objectCount];
@@ -933,22 +377,21 @@ int main(void) {
 			
 			
 			// objects
-			glUseProgram(skelShaderProgram);
-			glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "view"), 1, GL_FALSE, (GLfloat*)viewMat);
-			glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "projection"), 1, GL_FALSE, (GLfloat*)projMat);
+			glUseProgram(charShaderProgram);
+			glUniformMatrix4fv(glGetUniformLocation(charShaderProgram, "view"), 1, GL_FALSE, (GLfloat*)viewMat);
+			glUniformMatrix4fv(glGetUniformLocation(charShaderProgram, "projection"), 1, GL_FALSE, (GLfloat*)projMat);
 			glActiveTexture(GL_TEXTURE0);
-			glUniform3fv(glGetUniformLocation(skelShaderProgram, "light.pos"), 1, lightPos);
-			glUniform3fv(glGetUniformLocation(skelShaderProgram, "light.color"), 1, lightColor);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "light.constant"), lightConstant);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "light.linear"), lightLinear);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "light.quadratic"), lightQuadratic);
-			glUniform3f(glGetUniformLocation(skelShaderProgram, "skyColor"), clearR, clearG, clearB);
-			glUniform3fv(glGetUniformLocation(skelShaderProgram, "viewPos"), 1, cameraPos);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.ambient"), 0.2f);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.diffuse"), 0.8f);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.specular"), 0.0f);
-			glUniform1f(glGetUniformLocation(skelShaderProgram, "material.shininess"), 4.0f);
-			glUniform3f(glGetUniformLocation(skelShaderProgram, "objectColor"), /*0.8f, 0.5f, 0.4f*/ 0.0f, 0.0f, 0.0f);
+			glUniform3fv(glGetUniformLocation(charShaderProgram, "light.pos"), 1, lightPos);
+			glUniform3fv(glGetUniformLocation(charShaderProgram, "light.color"), 1, lightColor);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "light.constant"), lightConstant);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "light.linear"), lightLinear);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "light.quadratic"), lightQuadratic);
+			glUniform3f(glGetUniformLocation(charShaderProgram, "skyColor"), clearR, clearG, clearB);
+			glUniform3fv(glGetUniformLocation(charShaderProgram, "viewPos"), 1, cameraPos);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "material.ambient"), 0.2f);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "material.diffuse"), 0.8f);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "material.specular"), 0.0f);
+			glUniform1f(glGetUniformLocation(charShaderProgram, "material.shininess"), 4.0f);
 			vec3 modelRotX = { 1.0f, 0.0f, 0.0f };
 			vec3 modelRotY = { 0.0f, 1.0f, 0.0f };
 			vec3 modelRotZ = { 0.0f, 0.0f, 1.0f };
@@ -958,14 +401,16 @@ int main(void) {
 				glm_rotate(modelMat, objects[i].rot[1], modelRotY);
 				glm_rotate(modelMat, objects[i].rot[2], modelRotZ);
 				glm_scale(modelMat, objects[i].scale);
-				glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "model"), 1, GL_FALSE, (GLfloat*)modelMat);
+				glUniformMatrix4fv(glGetUniformLocation(charShaderProgram, "model"), 1, GL_FALSE, (GLfloat*)modelMat);
+				glUniform3f(glGetUniformLocation(charShaderProgram, "objectColor"), 0.8f, 0.5f, 0.4f );
 				
+				//vec3 objectColor[6] = { { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 1.0f }, { 1.0f, 0.0f, 1.0f } };
 				for(int ii = 0; ii < objects[i].model.meshCount; ii++) {
+					//glUniform3f(glGetUniformLocation(charShaderProgram, "objectColor"), objectColor[ii%6][0], objectColor[ii%6][1], objectColor[ii%6][2]);
+					glUniformMatrix4fv(glGetUniformLocation(charShaderProgram, "bones"), 4, GL_FALSE,
+					  objects[i].model.meshes[ii].boneOffsets[0][0]);
 					glBindTexture(GL_TEXTURE_2D, objects[i].model.textures[objects[i].model.meshes[ii].material]);
 					glBindVertexArray(objects[i].model.meshes[ii].VAO);
-					glUniformMatrix4fv(glGetUniformLocation(skelShaderProgram, "bones"),
-					 objects[i].model.meshes[ii].boneCount, GL_FALSE,
-					 (float*)objects[i].model.meshes[ii].boneOffsets );
 					glDrawElements(GL_TRIANGLES, objects[i].model.meshes[ii].indexCount, GL_UNSIGNED_INT, 0);
 					glBindVertexArray(0);
 				}
@@ -1016,11 +461,13 @@ int main(void) {
 			deltaTime--;
 		}
 		
+		
+		
 		glfwPollEvents();
 		
 		nowTime = glfwGetTime();
-		deltaTime += (nowTime - lastTime) / limitFPS;
-		tickTock  += (nowTime - lastTime) / tickSpeed;
+		deltaTime += (nowTime - lastTime) / FRAMES_PER_SECOND;
+		tickTock  += (nowTime - lastTime) / TICK_SPEED;
 		lastTime = nowTime;
 		
 		if(nowTime - secondTimer > 0.125f) {
@@ -1031,6 +478,9 @@ int main(void) {
 		}
 	}
 	
+	
+	
+	// end
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	

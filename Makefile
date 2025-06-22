@@ -8,7 +8,9 @@ BUILD := $(BUILD_DIR)$(BUILD_NAME)
 SRC := $(SRC_DIR)$(SRC_NAME)
 
 $(BUILD): $(SRC) $(BUILD_DIR)
-	@gcc $(SRC) -o $(BUILD) -ggdb3 -Iinclude -Iinclude/GLFW/include -Iinclude/GLFW/deps -Iinclude/cglm-0.9.4/include glad_gl.c -Linclude/GLFW/build -lglfw3 -lgdi32 -lassimp -lstdc++ -Linclude/cglm-0.9.4/build -Linclude/assimp-5.4.2/build && \
+	@gcc $(SRC) -o $(BUILD) -ggdb3 -Iinclude -Iinclude/GLFW/include -Iinclude/GLFW/deps -Iinclude/cglm-0.9.4/include \
+	glad_gl.c -lglfw3 -lgdi32 -lassimp -lstdc++ \
+	-Linclude/GLFW/build -Linclude/cglm-0.9.4/build -Linclude/assimp-5.4.2/build && \
 	echo $(BUILD_NAME) rebuilt!
 
 $(BUILD_DIR):

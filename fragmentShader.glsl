@@ -34,8 +34,12 @@ void main() {
 	vec3 col;
 	if(ourCol != vec3(0.0f)) col = ourCol;
 	else col = objectColor;
+	
+	
 	vec3 norm = normalize(normal);
+	
 	float avgObjectColor = (texCol.x + texCol.y + texCol.z) / 3.0f;
+	
 	vec3 lightDir = normalize(light.pos - fragPos);
 	// vec3 lightDir = vec3(0.5f, 3.0f, 0.4f);
 	float lightDist = length(light.pos - fragPos);
