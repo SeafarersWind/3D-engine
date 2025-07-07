@@ -34,11 +34,18 @@ struct Mesh {
 	unsigned int VAO, VBO, EBO;
 };
 
+struct Transformation {
+	char* name;
+	mat4 transformation;
+};
+
 struct Model {
 	struct Mesh* meshes;
 	unsigned int meshCount;
 	unsigned int* textures;
 	unsigned int textureCount;
+	struct Transformation transforms;
+	unsigned int transformCount;
 };
 
 struct Object {
@@ -57,8 +64,45 @@ struct Terrain {
 
 
 
-struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene) {
-printf("\n\n");
+void invertAssimpMat4toCglmMat4(mat4 d, struct aiMatrix4x4 s) {
+	d[0][0] = s.a1;
+	d[0][1] = s.b1;
+	d[0][2] = s.c1;
+	d[0][3] = s.d1;
+	d[1][0] = s.a2;
+	d[1][1] = s.b2;
+	d[1][2] = s.c2;
+	d[1][3] = s.d2;
+	d[2][0] = s.a3;
+	d[2][1] = s.b3;
+	d[2][2] = s.c3;
+	d[2][3] = s.d3;
+	d[3][0] = s.a4;
+	d[3][1] = s.b4;
+	d[3][2] = s.c4;
+	d[3][3] = s.d4;
+}
+
+void copyAssimpMat4toCglmMat4(mat4 d, struct aiMatrix4x4 s) {
+	d[0][0] = s.a1;
+	d[0][1] = s.a2;
+	d[0][2] = s.a3;
+	d[0][3] = s.a4;
+	d[1][0] = s.b1;
+	d[1][1] = s.b2;
+	d[1][2] = s.b3;
+	d[1][3] = s.b4;
+	d[2][0] = s.c1;
+	d[2][1] = s.c2;
+	d[2][2] = s.c3;
+	d[2][3] = s.c4;
+	d[3][0] = s.d1;
+	d[3][1] = s.d2;
+	d[3][2] = s.d3;
+	d[3][3] = s.d4;
+}
+
+struct Mesh processMesh(struct aiMesh* aiMesh, const struct aiScene* scene, mat4 transformation) {
 	unsigned int verticesCount = aiMesh->mNumVertices;
 	struct Vertex* vertices = malloc(aiMesh->mNumVertices*sizeof(struct Vertex));
 	
@@ -66,15 +110,18 @@ printf("\n\n");
 	for(unsigned int i = 0; i < aiMesh->mNumFaces; i++) { indexCount += aiMesh->mFaces[i].mNumIndices; }
 	unsigned int* indices = malloc(indexCount*sizeof(unsigned int));
 	
+	
 	// vertices
 	for(unsigned int i = 0; i < aiMesh->mNumVertices; i++) {
 		struct Vertex vertex;
 		vertex.position[0] = aiMesh->mVertices[i].x;
 		vertex.position[1] = aiMesh->mVertices[i].y;
 		vertex.position[2] = aiMesh->mVertices[i].z;
+		if(aiMesh->mNumBones == 0) glm_mat4_mulv3(transformation, vertex.position, 1, vertex.position);
 		vertex.normal[0] = aiMesh->mNormals[i].x;
 		vertex.normal[1] = aiMesh->mNormals[i].y;
 		vertex.normal[2] = aiMesh->mNormals[i].z;
+		if(aiMesh->mNumBones == 0) glm_mat4_mulv3(transformation, vertex.normal, 0, vertex.normal);
 		vertex.texCoords[0] = aiMesh->mTextureCoords[0][i].x;
 		vertex.texCoords[1] = aiMesh->mTextureCoords[0][i].y;
 		for (int ii = 0; ii < MAX_BONE_WEIGHTS; ii++) {
@@ -93,7 +140,7 @@ printf("\n\n");
 		}
 	}
 	
-	// bones
+	//bones
 	char* boneIndicesNames[aiMesh->mNumBones];
 	unsigned int boneIndices[aiMesh->mNumBones];
 	unsigned int boneCount = 0;
@@ -116,23 +163,17 @@ printf("\n\n");
 		boneNames[i] = malloc(aiMesh->mBones[boneIndices[i]]->mName.length+1);
 		strcpy(boneNames[i], aiMesh->mBones[boneIndices[i]]->mName.data);
 		
-		boneOffsets[i][0][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a1;
-		boneOffsets[i][0][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b1;
-		boneOffsets[i][0][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c1;
-		boneOffsets[i][0][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d1;
-		boneOffsets[i][1][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a2;
-		boneOffsets[i][1][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b2;
-		boneOffsets[i][1][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c2;
-		boneOffsets[i][1][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d2;
-		boneOffsets[i][2][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a3;
-		boneOffsets[i][2][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b3;
-		boneOffsets[i][2][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c3;
-		boneOffsets[i][2][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d3;
-		boneOffsets[i][3][0] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.a4;
-		boneOffsets[i][3][1] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.b4;
-		boneOffsets[i][3][2] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.c4;
-		boneOffsets[i][3][3] = aiMesh->mBones[boneIndices[i]]->mOffsetMatrix.d4;
-printf("%d %s \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", i, boneNames[i],
+		invertAssimpMat4toCglmMat4(boneOffsets[i], aiMesh->mBones[boneIndices[i]]->mOffsetMatrix);
+		mat4 boneTransformation;
+		glm_mat4_identity(boneTransformation);
+		for(unsigned int ii = 0; ii < nodeCount; ii++) {
+			if(strcmp(nodes[ii].name, boneNames[i]) == 0) {
+				glm_mat4_copy(nodes[ii].transformation, boneTransformation);
+				break;
+			}
+		}
+		glm_mat4_mul(boneTransformation, boneOffsets[i], boneOffsets[i]);
+printf("\n%d %s \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", i, boneNames[i],
  boneOffsets[i][0][0], boneOffsets[i][1][0], boneOffsets[i][2][0], boneOffsets[i][3][0],
  boneOffsets[i][0][1], boneOffsets[i][1][1], boneOffsets[i][2][1], boneOffsets[i][3][1],
  boneOffsets[i][0][2], boneOffsets[i][1][2], boneOffsets[i][2][2], boneOffsets[i][3][2],
@@ -141,9 +182,8 @@ printf("%d %s \n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", i, boneNa
 		for(unsigned int ii = 0; ii < aiMesh->mBones[boneIndices[i]]->mNumWeights; ii++) {
 			struct aiVertexWeight weight = aiMesh->mBones[boneIndices[i]]->mWeights[ii];
 			for(unsigned int iii = 0; iii < MAX_BONE_INFLUENCE; iii++) {
-				if(vertices[weight.mVertexId].m_BoneIDs[iii] == -1 && weight.mWeight != 0.0f) {
+					if(vertices[weight.mVertexId].m_BoneIDs[iii] == -1 && weight.mWeight != 0.0f) {
 printf("%d", i);
-if(weight.mWeight != 1.0f) printf("!");
 printf(" ");
 					vertices[weight.mVertexId].m_BoneIDs[iii] = i;
 					vertices[weight.mVertexId].m_Weights[iii] = weight.mWeight;
@@ -151,7 +191,6 @@ printf(" ");
 				}
 			}
 		}
-printf("\n");
 	}
 	
 	
@@ -270,23 +309,49 @@ printf("\n");
 	return finalMesh;
 }
 
+unsigned int nodeCount;
 unsigned int meshCount;
 
 void processNode(struct aiNode* node, struct Mesh* meshes, const struct aiScene* scene) {
+printf("\n%s", nodes[nodeCount].name);
+	mat4 transformation;
+	glm_mat4_copy(nodes[nodeCount].transformation, transformation);
+	nodeCount++;
 	for(unsigned int i = 0; i < node->mNumMeshes; i++) {
+printf("\nmesh %d", i);
 		struct aiMesh *aiMesh = scene->mMeshes[node->mMeshes[i]]; 
-		meshes[meshCount] = processMesh(aiMesh, scene);
+		meshes[meshCount] = processMesh(aiMesh, scene, transformation);
 		meshCount++;
 	}
+printf("\n");
 	for(unsigned int i = 0; i < node->mNumChildren; i++) {
+printf("\nchild of ");
+for(unsigned int i = 0; i < node->mName.length; i++) printf("%c", node->mName.data[i]);
 		processNode(node->mChildren[i], meshes, scene);
 	}
+if(node->mNumChildren > 0) printf("\n");
 }
 
-unsigned int countMeshes(struct aiNode* node) {
+unsigned int countNodesandMeshes(struct aiNode* node) {
+	nodeCount++;
 	unsigned int meshCount = node->mNumMeshes;
-	for(unsigned int i = 0; i < node->mNumChildren; i++) meshCount += countMeshes(node->mChildren[i]);
+	for(unsigned int i = 0; i < node->mNumChildren; i++) meshCount += countNodesandMeshes(node->mChildren[i]);
 	return meshCount;
+}
+
+void initNodes(struct aiNode* node, mat4 parentTransformation) {
+	mat4 transformation;
+	invertAssimpMat4toCglmMat4(transformation, node->mTransformation);
+	glm_mat4_mul(parentTransformation, transformation, transformation);
+	glm_mat4_copy(transformation, nodes[nodeCount].transformation);
+	
+	nodes[nodeCount].name = malloc(node->mName.length+1);
+	strncpy(nodes[nodeCount].name, node->mName.data, node->mName.length);
+	nodes[nodeCount].name[node->mName.length] = '\0';
+	
+	nodeCount++;
+	
+	for(unsigned int i = 0; i < node->mNumChildren; i++) initNodes(node->mChildren[i], transformation);
 }
 
 struct Terrain createTerrain(char* modelPath) {
@@ -350,10 +415,24 @@ struct Model loadModel(char* modelPath) {
 	}
 	
 	// meshes
-	model.meshCount = countMeshes(scene->mRootNode);
-	model.meshes = malloc(model.meshCount*sizeof(struct Mesh));
+	nodeCount = 0;
 	meshCount = 0;
+	model.meshCount = countNodesandMeshes(scene->mRootNode);
+	model.transformCount = nodeCount;
+	
+	mode.transforms = malloc(nodeCount * sizeof(struct Node));
+	nodeCount = 0;
+	mat4 identity;
+	glm_mat4_identity(identity);
+	initNodes(scene->mRootNode, identity);
+	nodeCount = 0;
+	
+	model.meshes = malloc(model.meshCount * sizeof(struct Mesh));
+	meshCount = 0;
+	
 	processNode(scene->mRootNode, model.meshes, scene);
+	
+	free(nodes);
 	
 	// textures
 	model.textures = malloc(scene->mNumMaterials*sizeof(unsigned int));

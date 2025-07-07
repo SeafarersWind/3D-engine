@@ -84,7 +84,7 @@ int main(void) {
 	
 	int shaderProgram = createShaderProgram("shaderProgram", vertexShader, fragmentShader);
 	if(!shaderProgram) return -1;
-	int charShaderProgram = createShaderProgram("charShaderProgram", vertexShader, fragmentShader);
+	int charShaderProgram = createShaderProgram("charShaderProgram", skelVertexShader, fragmentShader);
 	if(!charShaderProgram) return -1;
 	int lightShaderProgram = createShaderProgram("lightShaderProgram", billboardVertexShader, lightFragmentShader);
 	if(!lightShaderProgram) return -1;
@@ -108,7 +108,9 @@ int main(void) {
 	
 	
 	// objects
-	struct Object icosa = createObject(loadModel("assets/Character/icosa.obj"));
+printf("icosa");
+	struct Object icosa = createObject(loadModel("assets/Character/icosa2.dae"));
+printf("done");
 	icosa.pos[0] = 00.0f;
 	icosa.pos[1] = 00.0f;
 	icosa.pos[2] = 00.0f;
