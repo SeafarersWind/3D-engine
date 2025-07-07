@@ -1,5 +1,5 @@
 # 3D-engine
-This is the product of my study of OpenGL. It has been a joy making these demos on the way.
+These are demos from my study of OpenGL.
 
 Controls are WASD and the mouse.
 
